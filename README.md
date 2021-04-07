@@ -71,7 +71,7 @@ To get a local copy up and running follow these simple steps.
 ### Prerequisites
 
 You need to create an application over at [The Youtube Developer Console](https://console.cloud.google.com/apis/dashboard) with the Data APIv3. When you first run your application, you should get a link where you can accept your request.
-#### WARNING: YOUR APPLICATION HAS TO BE AUDIT BY YOUTUBE TO USE IT WITHOUT IT BEING BLOCKEED</b>
+#### WARNING: YOUR APPLICATION HAS TO BE AUDIT BY YOUTUBE TO USE IT WITHOUT IT BEING BLOCKED</b>
 
 In the assets folder you should add the following files:
 1. auth.json
