@@ -76,7 +76,7 @@ You need to create an application over at [The Youtube Developer Console](https:
 
 In the assets folder you should add the following files:
 1. auth.json
-    ```sh
+    ```json
    {
         "twitch": {
             "client-id": "YOUR CLIENT ID",
@@ -86,9 +86,9 @@ In the assets folder you should add the following files:
     }
    ```
 2. client_secrets.json
-    ```sh
+    ```json
    {
-        "web": 
+        "web": {
             "client_id": "YOUR CLIENT ID",
             "client_secret": "YOUR CLIENT SECRET",
             "redirect_uris": [],
@@ -116,7 +116,7 @@ In the assets folder you should add the following files:
 This application can be used on multiple channels. But be aware that have a limited amount of quota with the youtube datav3 api.
 
 In TwitchDownload.py specify which games/channels you want to upload to your channel:
-   ```sh
+   ```python
    dc.generateClipsFromData("https://api.twitch.tv/helix/clips", {
        "game_id": "509658",   # JUST CHATTING
        "first": "8", 
@@ -125,36 +125,38 @@ In TwitchDownload.py specify which games/channels you want to upload to your cha
    ```
 
 Assets/description.txt specifies the default video description. Change this to your liking:
-    ```sh
 
-    #ScorchAI #Shorts
-    👀 Check that you are subscribed!
-    ⚠ EXPAND ME ⚠
+```
+#ScorchAI #Shorts
+👀 Check that you are subscribed!
+⚠ EXPAND ME ⚠
 
-    ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-    ✅ Socials:
+✅ Socials:
 
-    👑 Discord: https://discord.gg/5Z82Tjt 
-    👑 Main Channel: https://www.youtube.com/channel/UCdWXErDsp1GJASnmLm5cUCA
-    👑 Twitch: https://twitch.tv/scorchchamp
+👑 Discord: https://discord.gg/5Z82Tjt 
+👑 Main Channel: https://www.youtube.com/channel/UCdWXErDsp1GJASnmLm5cUCA
+👑 Twitch: https://twitch.tv/scorchchamp
 
-    ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-    🌼 INFO ABOUT THIS CHANNEL 🌼
+🌼 INFO ABOUT THIS CHANNEL 🌼
 
-    ➾ This video was uploaded via ScorchAI. This Application has been approved by YouTube Audit.
-    ➾ This AI is currently in its test-fase; Huge changes will be made to the AI.
+➾ This video was uploaded via ScorchAI. This Application has been approved by YouTube Audit.
+➾ This AI is currently in its test-fase; Huge changes will be made to the AI.
 
-    ⚡ Do you want specific games/creators added as clips? Create a ticket over at the #create-ticket on my discord!
+⚡ Do you want specific games/creators added as clips? Create a ticket over at the #create-ticket on my discord!
 
-    ⚐ If the title is wrong or the content is offensive/not interesting/bad/etc please, again, contact me over at discord.
+⚐ If the title is wrong or the content is offensive/not interesting/bad/etc please, again, contact me over at discord.
 
-    ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+👑 CONTRIBUTE: https://github.com/cornelissenl/ScorchAI
 
-    📷 VIDEO INFO 
-    ✍ contact me on Discord under #create-ticket with this videoID for questions or notices:
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
+📷 VIDEO INFO 
+✍ contact me on Discord under #create-ticket with this videoID for questions or notices:
+```
 
 
 
