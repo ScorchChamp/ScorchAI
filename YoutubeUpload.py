@@ -9,24 +9,6 @@ from DataCollector import DataCollector
 
 API = YoutubeAPI('./assets/client_secrets.json')
 
-
-# clip_folder = './clips/'
-# clips = os.listdir(clip_folder)
-# if (len(clips) == 1):
-#     print("NO CLIPS FOUND, EXITTING...")
-#     sys.exit()
-# else:
-#     print(clips[0])
-# mp4_file = "./clips/" + clips[0]
-
-# if not mp4_file.endswith(".mp4"):
-#     mp4_file = "./clips/" + clips[1]
-
-
-# title = mp4_file.split("/")[-1].split(".")[0]
-
-
-
 def getClipNameList(folder):
     clips = os.listdir(clip_folder)
     returnClips = []
@@ -73,7 +55,7 @@ description += '\n\
     )
 
 
-tags = clipData['broadcaster_name']
+tags = clipData['broadcaster_name'] + ", "
 with open('./assets/tags.txt', encoding="utf8") as file:
     tags += file.read()
 
