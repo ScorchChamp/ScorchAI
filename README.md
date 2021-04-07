@@ -19,7 +19,7 @@
   <p align="center">
     Twitch Clip Bot
     <br />
-    <a href="https://github.com/cornelissenl/ScorchAI"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/cornelissenl/ScorchAI/releases/">Releases »</a>
     <br />
     <br />
     <a href="https://github.com/cornelissenl/ScorchAI">View Demo</a>
@@ -33,11 +33,8 @@
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#releases">Releases</a></li>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -51,7 +48,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
@@ -61,6 +57,9 @@
 ## About The Project
 
 This bot was made after a lack of archiving of Twitch clips on youtube. I came with the idea to make a bot that automatically uploads the 24 most viewed clips per day per category. 
+
+## Releases
+Download the latest version of [ScorchAI](https://github.com/cornelissenl/ScorchAI/releases/) and extract the ScorchAI-x.zip / ScorchAI-x.tar.gz. Make sure to read <a href="#getting-started">Getting Started</a>.
 
 
 
