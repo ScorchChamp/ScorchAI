@@ -3,6 +3,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+# Files
+filezilla/
+clips/
+clipData/
+assets/auth.json
+assets/client_secrets.json
+token_youtube_v3.pickle
+
 # C extensions
 *.so
 

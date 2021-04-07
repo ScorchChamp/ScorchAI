@@ -1,2 +1,2 @@
 # ScorchAI
-ScorchAI Official Source Code
+ScorchAI's source code
