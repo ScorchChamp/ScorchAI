@@ -7,38 +7,40 @@ import json
 from YoutubeAPI import YoutubeAPI
 from DataCollector import DataCollector
 
+CLIPS_FOLDER = './CLIPS/'
+CLIP_DATA_FOLDER = './clipData/'
+
 API = YoutubeAPI('./assets/client_secrets.json')
+CLIPS = getClipNameList(CLIPS_FOLDER)
 
 def getClipNameList(folder):
-    clips = os.listdir(clip_folder)
+    CLIPS = os.listdir(CLIPS_FOLDER)
     returnClips = []
-    for clip in clips:
+    for clip in CLIPS:
         if clip.endswith(".mp4"):
             returnClips.append(clip.split(".")[0])
     return returnClips
 
-clip_folder = './clips/'
-clip_data_folder = './clipData/'
-clips = getClipNameList(clip_folder)
 
-if len(clips) > 0:
-    clip = clips[0]
+if len(CLIPS) > 0:
+    clip = CLIPS[0]
 else:
     print("NO CLIPS FOUND, EXITTING...")
     sys.exit()
 
 clipData = ""
-with open('{}{}.json'.format(clip_data_folder, clip)) as f:
+with open('{}{}.json'.format(CLIP_DATA_FOLDER, clip)) as f:
     clipData = json.load(f)
 
 
 
-mp4_file = '{}{}.mp4'.format(clip_folder, clip)
+mp4_file = '{}{}.mp4'.format(CLIPS_FOLDER, clip)
 title = "{} ({})".format(clipData['title'], clipData['broadcaster_name'])
-
 description = '#{} '.format(clipData['broadcaster_name'])
+
 with open('./assets/description.txt', encoding="utf8") as file:
     description += file.read()
+
 description += '\n\
     VideoID: {}\n\
     Created At: {}\n\
@@ -54,15 +56,15 @@ description += '\n\
         clipData['thumbnail_url'].split("-preview")[0] + ".mp4"
     )
 
-
 tags = clipData['broadcaster_name'] + ", "
 with open('./assets/tags.txt', encoding="utf8") as file:
     tags += file.read()
 
-os.rename(mp4_file, "./clips/uploaded/" + clip + ".mp4")
-
-mp4_file = "./clips/uploaded/" + mp4_file.split("/")[-1]
+os.rename(mp4_file, "./CLIPS/uploaded/" + clip + ".mp4")
+mp4_file = "./CLIPS/uploaded/" + mp4_file.split("/")[-1]
 
 uploadDate = datetime.datetime.now() + datetime.timedelta(hours=1)
+
 API.uploadVideo(mp4_file, title, description, tags, uploadDate)
+
 print("{} uploaded succesfully!".format(title))

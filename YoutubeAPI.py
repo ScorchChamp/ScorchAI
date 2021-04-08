@@ -9,11 +9,11 @@ class YoutubeAPI:
     API_VERSION = 'v3'
     SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
     CLIENT_SECRET_FILE = ''
-    service = ''
+    SERVICE = ''
         
     def __init__(self, CLIENT_SECRET_FILE): 
         self.CLIENT_SECRET_FILE = CLIENT_SECRET_FILE
-        self.service = Create_Service(self.CLIENT_SECRET_FILE, self.API_NAME, self.API_VERSION, self.SCOPES)
+        self.SERVICE = Create_Service(self.CLIENT_SECRET_FILE, self.API_NAME, self.API_VERSION, self.SCOPES)
 
     def uploadVideo(self, file, title, description, tags, uploadDate = datetime.datetime.now()):
         request_body = {
@@ -37,7 +37,7 @@ class YoutubeAPI:
     def insert(self, request_body, file):
         print(file)
         mediaFile = MediaFileUpload(file)
-        response_upload = self.service.videos().insert(
+        response_upload = self.SERVICE.videos().insert(
             part='snippet,status',
             body=request_body,
             media_body= mediaFile
