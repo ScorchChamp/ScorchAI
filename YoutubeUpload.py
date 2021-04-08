@@ -7,12 +7,6 @@ import json
 from YoutubeAPI import YoutubeAPI
 from DataCollector import DataCollector
 
-CLIPS_FOLDER = './CLIPS/'
-CLIP_DATA_FOLDER = './clipData/'
-
-API = YoutubeAPI('./assets/client_secrets.json')
-CLIPS = getClipNameList(CLIPS_FOLDER)
-
 def getClipNameList(folder):
     CLIPS = os.listdir(CLIPS_FOLDER)
     returnClips = []
@@ -21,6 +15,12 @@ def getClipNameList(folder):
             returnClips.append(clip.split(".")[0])
     return returnClips
 
+
+CLIPS_FOLDER = './CLIPS/'
+CLIP_DATA_FOLDER = './clipData/'
+
+API = YoutubeAPI('./assets/client_secrets.json')
+CLIPS = getClipNameList(CLIPS_FOLDER)
 
 if len(CLIPS) > 0:
     clip = CLIPS[0]
