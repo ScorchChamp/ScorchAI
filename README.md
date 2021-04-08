@@ -103,7 +103,7 @@ In the assets folder you should add the following files:
    ```sh
    git clone https://github.com/cornelissenl/ScorchAI_name.git
    ```
-1. Clone the repo
+1. Install Libraries
    ```sh
    pip install -r requirements.txt
    ```
