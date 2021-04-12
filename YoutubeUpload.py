@@ -60,7 +60,7 @@ tags = clipData['broadcaster_name'] + ", "
 with open('./assets/tags.txt', encoding="utf8") as file:
     tags += file.read()
 
-os.rename(mp4_file, "./CLIPS/uploaded/" + clip + ".mp4")
+os.rename(mp4_file, "{}uploaded/{}.mp4".format(CLIPS_FOLDER, clip))
 mp4_file = "./CLIPS/uploaded/" + mp4_file.split("/")[-1]
 
 uploadDate = datetime.datetime.now() + datetime.timedelta(hours=1)
