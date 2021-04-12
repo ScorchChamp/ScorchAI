@@ -16,7 +16,7 @@ def getClipNameList(folder):
     return returnClips
 
 
-CLIPS_FOLDER = './CLIPS/'
+CLIPS_FOLDER = './clips/'
 CLIP_DATA_FOLDER = './clipData/'
 
 API = YoutubeAPI('./assets/client_secrets.json')
