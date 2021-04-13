@@ -1,0 +1,20 @@
+{
+    "all_categories": {
+        "CHESS": {
+            "id": "743",
+            "real_name": "Chess"
+        },
+        "AMONGUS": {
+            "id": "510218",
+            "real_name": "Among Us"
+        },
+        "JUSTCHATTING": {
+            "id": "509658",
+            "real_name": "Just Chatting"
+        },
+        "MINECRAFT": {
+            "id": "27471",
+            "real_name": "Minecraft"
+        }
+    }
+}
