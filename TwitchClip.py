@@ -16,8 +16,7 @@ class TwitchClip:
         self.thumbnailURL = self.data['thumbnail_url']
         try:    
             self.clipFile = scorchAI.generatorFileNameFromFolderAndName(output_folder, self.mp4Name)
-            urllib.request.urlretrieve(self.getdownload_url(), self.clipFile, reporthook=scorchAI.dl_progress) 
-            print()
+            scorchAI.download_url(self.getdownload_url(), self.clipFile, self.gettitle()) 
         except: 
             print(constants.CLIP_DOWNLOAD_FAILED_MESSAGE)
             sys.stdout.write(sys.exc_info()[0])

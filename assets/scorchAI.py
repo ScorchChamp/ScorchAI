@@ -1,4 +1,7 @@
 from assets import constants
+import sys
+import urllib.request
+from tqdm import tqdm
 
 def generateDescription(clipData):
     description = '#{} '.format(clipData['broadcaster_name'])
@@ -24,11 +27,17 @@ def generateTags(clipData):
     with open('./assets/tags.txt', encoding="utf8") as file:
         tags += file.read()
     return tags
-
-def dl_progress(self, count, block_size, total_size):
-    percent = int(count * block_size * 100 / total_size)
-    sys.stdout.write(self.gettitle()+" ["+"-"*percent+"_"*(100-percent)+"]" + "\r")
-
     
 def generatorFileNameFromFolderAndName(folder, name):
     return '{}{}.mp4'.format(folder, name)
+
+class DownloadProgressBar(tqdm):
+    def update_to(self, b=1, bsize=1, tsize=None):
+        if tsize is not None:
+            self.total = tsize
+        self.update(b * bsize - self.n)
+
+def download_url(url, output_path, title):
+    with DownloadProgressBar(unit='B', unit_scale=True,
+                             miniters=1, desc=title) as t:
+        urllib.request.urlretrieve(url, filename=output_path, reporthook=t.update_to)
