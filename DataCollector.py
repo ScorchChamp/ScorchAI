@@ -4,7 +4,7 @@ import requests
 import datetime
 from YoutubeAPI import YoutubeAPI
 from pathlib import Path
-import os
+from assets import constants
 
 class DataCollector:
     clips = []
@@ -17,17 +17,13 @@ class DataCollector:
     dataFolder = ""
     twitchAuthFile = ""
 
-    def __init__(self, twitchAuthFile, youtubeSecretFile, clipFolder, dataFolder): 
-        self.clipFolder = clipFolder
-        self.dataFolder = dataFolder
-
+    def __init__(self): 
         # Twitch API init
-        self.twitchAuthFile = twitchAuthFile
-        self.authorizer = Authorizer(twitchAuthFile)
+        self.authorizer = Authorizer(constants.AUTH_FILE)
         self.generateHeaders(self.authorizer.getHeaders())
 
         # Youtube API init
-        self.API = YoutubeAPI(youtubeSecretFile)
+        self.API = YoutubeAPI()
 
     def collectDataFromAPI(self, url, parameters):
         self.generateParameters(parameters)
@@ -46,9 +42,9 @@ class DataCollector:
 
     def downloadClipsListToFolder(self):
         for clip in self.clips:
-            if not self.doesClipDataExist(self.dataFolder, clip.getid()):
-                clip.downloadMP4FromTwitchServer(self.clipFolder)
-                clip.exportClipData(self.dataFolder)
+            if not self.doesClipDataExist(constants.CLIP_DATA_FOLDER, clip.getid()):
+                clip.downloadMP4FromTwitchServer(constants.CLIPS_FOLDER)
+                clip.exportClipData(constants.CLIP_DATA_FOLDER)
             else:
                 print("Clip already exists UnPOg")
 
@@ -67,5 +63,5 @@ class DataCollector:
             return file.read()
     
     def doesClipDataExist(self, dataFolder, clipID):
-        file = Path("{}{}.json".format(dataFolder,clipID))   
+        file = Path("{}{}.json".format(constants.CLIP_DATA_FOLDER,clipID))   
         return file.is_file()

@@ -1,0 +1,38 @@
+{
+    "download_categories": [
+        {
+            "game_id": "743",
+            "first": "4"
+        },
+        {
+            "game_id": "510218",
+            "first": "4" 
+        },
+        {
+            "game_id": "27471",
+            "first": "8"
+        },
+        {
+            "game_id": "509658",
+            "first": "8"
+        }
+    ],
+    "all_categories": {
+        "CHESS": {
+            "id": "743",
+            "real_name": "Chess"
+        },
+        "AMONGUS": {
+            "id": "510218",
+            "real_name": "Among Us"
+        },
+        "JUSTCHATTING": {
+            "id": "509658",
+            "real_name": "Just Chatting"
+        },
+        "MINECRAFT": {
+            "id": "27471",
+            "real_name": "Minecraft"
+        }
+    }
+}
