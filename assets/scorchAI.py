@@ -21,6 +21,7 @@ def generateDescription(clipData):
             clipData['game_id'], 
             clipData['thumbnail_url'].split("-preview")[0] + ".mp4"
         )
+    return description
 
 def generateTags(clipData):
     tags = clipData['broadcaster_name'] + ", "
@@ -30,6 +31,10 @@ def generateTags(clipData):
     
 def generatorFileNameFromFolderAndName(folder, name):
     return '{}{}.mp4'.format(folder, name)
+
+def generateTitle(title, brc_name):
+    title = "{} ({})".format(title, brc_name)
+    return title
 
 class DownloadProgressBar(tqdm):
     def update_to(self, b=1, bsize=1, tsize=None):
@@ -41,3 +46,4 @@ def download_url(url, output_path, title):
     with DownloadProgressBar(unit='B', unit_scale=True,
                              miniters=1, desc=title) as t:
         urllib.request.urlretrieve(url, filename=output_path, reporthook=t.update_to)
+
