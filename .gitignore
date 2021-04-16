@@ -11,6 +11,7 @@ clipData/
 assets/auth.json
 assets/client_secrets.json
 assets/categories.json
+assets/constants.json
 token_youtube_v3.pickle
 
 # C extensions
