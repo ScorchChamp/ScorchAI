@@ -14,11 +14,13 @@ class YoutubeAPI:
             'snippet': {
                 'title': title,
                 'description': description,
-                'tags': tags
+                'tags': tags,
+                'categoryId': 20
             },
             'status': self.generateStatus(uploadDate),
             'notifySubscribers': True
         }
+        print(request_body)
         self.insert(request_body, file)
 
     def generateStatus(self, uploadDate, forKids = False):
