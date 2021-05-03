@@ -29,20 +29,4 @@ clipData = ""
 with open('{}{}.json'.format(constants.CLIP_DATA_FOLDER, clip)) as f:
     clipData = json.load(f)
 
-
-# thumbnail = scorchAI.generateThumbnail(clipData)
-
-tags = scorchAI.generateTags(clipData)
-description = scorchAI.generateDescription(clipData)
-mp4_file = '{}{}.mp4'.format(constants.CLIPS_FOLDER, clip)
-title = scorchAI.generateTitle(clipData['title'], clipData['broadcaster_name'])
-
-
-
-os.rename(mp4_file, "{}uploaded/{}.mp4".format(constants.CLIPS_FOLDER, clip))
-mp4_file = "{}uploaded/{}".format(constants.CLIPS_FOLDER, mp4_file.split("/")[-1])
-uploadDate = datetime.datetime.now() + datetime.timedelta(hours=1)
-
-API.uploadVideo(mp4_file, title, description, tags, uploadDate)
-
-print("{} uploaded succesfully!".format(title))
+thumbnail = scorchAI.generateThumbnail(clipData)
