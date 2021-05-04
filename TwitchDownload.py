@@ -13,8 +13,9 @@ dc = DataCollector()
 
 try:
     for file in os.listdir(constants.UPLOADED_FOLDER):
-        os.remove(UPLOADED_FOLDER + file)
+        os.remove(constants.UPLOADED_FOLDER + file)
 except:
+    print("removal failed")
     pass
 
 with open(constants.CATEGORIES_FILE, encoding="utf8") as file:
