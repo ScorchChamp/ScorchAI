@@ -31,11 +31,10 @@ def generateDescription(clipData):
     description = '#{} '.format(clipData['broadcaster_name'])
     with open(constants.DESCRIPTION_FILE, encoding="utf8") as file:
         description += file.read()
-    description += clipData['id']
     return description
 
 def generateTags(clipData):
-    tags = clipData['broadcaster_name'] + ", "
+    tags = clipData['broadcaster_name'] + ", " + clipData['id'] + ","
     with open('./assets/tags.txt', encoding="utf8") as file:
         tags += file.read()
     return tags
