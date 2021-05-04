@@ -28,7 +28,9 @@ def generateThumbnail(clipData):
 
 
 def generateDescription(clipData):
-    description = '#{} '.format(clipData['broadcaster_name'])
+    brc = clipData['broadcaster_name']
+    description = "FOLLOW {} ON: https://twitch.tv/{}".format(brc, brc)
+    description += '\n#{} '.format(brc)
     with open(constants.DESCRIPTION_FILE, encoding="utf8") as file:
         description += file.read()
     return description
