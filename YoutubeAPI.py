@@ -20,7 +20,6 @@ class YoutubeAPI:
             'status': self.generateStatus(uploadDate),
             'notifySubscribers': True
         }
-        print(request_body)
         self.insert(request_body, file)
 
     def generateStatus(self, uploadDate, forKids = False):
