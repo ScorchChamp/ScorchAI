@@ -31,7 +31,7 @@ def generateDescription(clipData):
     description = '#{} '.format(clipData['broadcaster_name'])
     with open(constants.DESCRIPTION_FILE, encoding="utf8") as file:
         description += file.read()
-    description += '\n\VideoID: {}\n'.format(clipData['id'])
+    description += clipData['id']
     return description
 
 def generateTags(clipData):
