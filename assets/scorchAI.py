@@ -2,29 +2,29 @@ from assets import constants
 import sys
 import urllib
 from tqdm import tqdm
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
+# from PIL import Image
+# from PIL import ImageFont
+# from PIL import ImageDraw
 
-def generateThumbnail(clipData):
-    # NOT YET USED
+# def generateThumbnail(clipData):
+#     # NOT YET USED
 
-    download_url(clipData['thumbnail_url'], "./images/thumbnails/{}.jpg".format(clipData['id']), clipData['id'])
+#     download_url(clipData['thumbnail_url'], "./images/thumbnails/{}.jpg".format(clipData['id']), clipData['id'])
 
-    text = clipData['broadcaster_name']
+#     text = clipData['broadcaster_name']
 
 
-    img = Image.open("./images/thumbnails/{}.jpg".format(clipData['id']))
-    draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype("./assets/ostrich-regular.ttf", 64)
+#     img = Image.open("./images/thumbnails/{}.jpg".format(clipData['id']))
+#     draw = ImageDraw.Draw(img)
+#     font = ImageFont.truetype("./assets/ostrich-regular.ttf", 64)
     
-    x,y = font.getsize(text)
-    width, height = img.size
-    draw.rectangle((0, height-y, x, height), fill=(0,0,0,128))
-    draw.text((0, height-y), text , (255,255,255), font=font)
+#     x,y = font.getsize(text)
+#     width, height = img.size
+#     draw.rectangle((0, height-y, x, height), fill=(0,0,0,128))
+#     draw.text((0, height-y), text , (255,255,255), font=font)
     
-    img.save("./images/thumbnails/{}-thumb.jpg".format(clipData['id']))
-    return "./images/thumbnails/{}-thumb.jpg".format(clipData['id'])
+#     img.save("./images/thumbnails/{}-thumb.jpg".format(clipData['id']))
+#     return "./images/thumbnails/{}-thumb.jpg".format(clipData['id'])
 
 
 def generateDescription(clipData):
