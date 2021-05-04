@@ -36,14 +36,12 @@ def generateDescription(clipData):
         Created At: {}\n\
         Created By: {}\n\
         View count on Twitch: {}\n\
-        Game ID: {}\n\
-        Download Clip at: {}\n'.format(
+        Game ID: {}\n'.format(
             clipData['id'],
             clipData['created_at'],
             clipData['creator_name'], 
             clipData['view_count'], 
-            clipData['game_id'], 
-            clipData['thumbnail_url'].split("-preview")[0] + ".mp4"
+            clipData['game_id']
         )
     return description
 
