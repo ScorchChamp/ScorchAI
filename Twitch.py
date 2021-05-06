@@ -19,19 +19,14 @@ class Twitch:
             categories = json.load(file)
             return categories['broadcasters']
 
-    def generateCompilation(self, amount):
-        self.cleanFolder('./videos/ready_compilations/')
-        self.generateClips(amount)
-        self.compileClips()
-
-
     def generateClips(self, amount):
+        self.cleanFolder('./videos/uploaded_clips/')
         clips_left = amount
         prio = 1
         while clips_left > 0:
             category = self.getNextcategory(prio)
             if not category:
-                print('No clips left...')
+                print('No priority number: {}'.format(prio))
                 break
             clips_left = self.downloadClipsList(category['parameters'], clips_left)
             prio += 1
@@ -49,49 +44,33 @@ class Twitch:
 
     def downloadClipsList(self, parameters, amount_left = 10):
         parameters['first'] = 10
-        parameters["started_at"] = self.getYesterdayFormatted()
+        parameters["started_at"] = self.getTimeWithDelay(10)
         for clip in self.API.getClipsList(parameters)['data']:
-            # print("Clips left: {}".format(amount_left))
             if amount_left < 1:
                 return amount_left
             if os.path.isfile('./clipData/{}.json'.format(clip['id'])):
                 print("Clip already used, skipping...")
             else:
-                # if not 'en' in clip['language'] or not clip['view_count'] > 500:
-                # print("Clip didnt reach requirements, skipping...")
-                # else:
-                self.dumpClipFile(clip)
+                self.dumpClipData(clip)
                 self.API.downloadClip(
                     clip['id'],
                     clip['thumbnail_url'].split("-preview")[0] + ".mp4"
                 )
                 amount_left -=1
         return amount_left
-
-    def dumpClipFile(self, clip):
+    
+    def dumpClipData(self, clip):
         file = "./clipData/{}.json".format(clip['id'])
         with open(file, 'w') as fp:
             json.dump(clip, fp)
 
-    def compileClips(self):
-        L = []
-        for root, dirs, files in os.walk("./videos/clips/"):
-            for file in files:
-                if os.path.splitext(file)[1] == '.mp4':
-                    filePath = os.path.join(root, file)
-                    video = VideoFileClip(filePath)
-                    L.append(video)
-
-        final_clip = concatenate_videoclips(L, method='compose')
-        final_clip.to_videofile("./videos/ready_compilations/{}.mp4".format(self.getYesterdayFormatted()).replace(":", "-"), fps=24, remove_temp=True)
-    
     def cleanFolder(self, dir):
         for f in os.listdir(dir):
             print('Cleaning clip in folder: {}'.format(f))
             os.remove(os.path.join(dir, f))
 
-    def getYesterdayFormatted(self):
-        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=1)
+    def getTimeWithDelay(self, hours = 24):
+        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(hours=hours)
         YESTERDAY_DATE_FORMATTED = YESTERDAY_DATE_ISO.strftime("%Y-%m-%dT%H:%M:%SZ")
         return YESTERDAY_DATE_FORMATTED
 

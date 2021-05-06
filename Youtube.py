@@ -10,39 +10,35 @@ class Youtube:
         self.API = YoutubeAPI("./auth/client_secrets.json")
         self.twitch = Twitch()
 
-    def uploadClip(self, amount = 1, hourOffset = 0):
+    def uploadClip(self, generateWhenNoneFound):
         videos = self.getVideos('./videos/clips/')
-        while len(videos) < amount:
-            print('Getting clips')
-            self.twitch.generateClips(amount)
-            videos = self.getVideos('./videos/clips/')
-        for i in range(amount):
-            video = './videos/clips/{}.mp4'.format(videos[i])
-            title = self.generateTitle(videos[i])
-            description = self.generateDescription(videos[i], "#{}".format(self.getBroadcaster(videos[i])))
-            tags = self.generateTags(videos[i])
-            uploadDate = self.getUploadDate(hourOffset)
-            self.uploadVideo(video, title, description, tags, uploadDate)
-        
-    def uploadCompilation(self, hourOffset):
-        videos = self.getVideos('./videos/ready_compilations/')
         while len(videos) == 0:
             print('Getting clips')
             self.twitch.generateClips(1)
             videos = self.getVideos('./videos/clips/')
 
-        video = './videos/ready_compilations/{}.mp4'.format(videos[0])
-        title = "Daily Twitch compilation"
-        description = self.generateDescription(False, "#Compilation ")
-        tags = self.generateTags(videos[0])
-        uploadDate = self.getUploadDate(hourOffset)
-        self.uploadVideo(video, title, description, tags, uploadDate)
+        vidData = self.generateVidData(videos[0])
+        self.uploadVideo(
+            vidData['videourl'], 
+            vidData['title'], 
+            vidData['description'], 
+            vidData['tags']
+        )
+        
+    def generateVidData(self, vidData):
+        vidData = {
+            'videourl': './videos/clips/{}.mp4'.format(vidData),
+            'title': self.generateTitle(vidData),
+            'description': self.generateDescription(vidData, "#{}".format(self.getBroadcaster(vidData))),
+            'tags': self.generateTags(vidData)
+        }
+        return vidData
 
-    def uploadVideo(self, video, title, description, tags, uploadDate):
-        newDir = "./videos/uploaded/{}".format(video.split("/")[-1])
+    def uploadVideo(self, video, title, description, tags):
+        newDir = "./videos/uploaded_clips/{}".format(video.split("/")[-1])
         shutil.move(video, newDir)
         print("Uploading {}".format(title))
-        self.API.uploadVideo(newDir, title, description, tags, uploadDate)
+        self.API.uploadVideo(newDir, title, description, tags)
 
     def getVideos(self, folder):
         videos = os.listdir(folder)
