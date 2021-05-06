@@ -53,6 +53,9 @@ class Youtube:
     def generateTags(self, clipID, tags = ""):
         with open('./assets/tags.txt', encoding="utf8") as file:
             tags += file.read()
+        with open("./clipData/{}.json".format(clipID), encoding="utf8") as file:
+            data = json.load(file)
+            tags += data['broadcaster_name']
         return tags
 
     def generateDescription(self, clipID = False, description = ""):
