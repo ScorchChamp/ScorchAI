@@ -41,7 +41,7 @@ title = scorchAI.generateTitle(clipData['title'], clipData['broadcaster_name'])
 
 os.rename(mp4_file, "{}uploaded/{}.mp4".format(constants.CLIPS_FOLDER, clip))
 mp4_file = "{}uploaded/{}".format(constants.CLIPS_FOLDER, mp4_file.split("/")[-1])
-uploadDate = datetime.datetime.now() + datetime.timedelta(hours=1)
+uploadDate = datetime.datetime.now()# + datetime.timedelta(hours=1)
 
 API.uploadVideo(mp4_file, title, description, tags, uploadDate)
 
