@@ -9,7 +9,6 @@ filezilla/
 *.mp4
 clipData/*.json
 auth/*
-*.pickle
 
 # C extensions
 *.so

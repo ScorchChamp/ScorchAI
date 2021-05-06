@@ -3,7 +3,6 @@ from datetime import datetime, timezone
 import datetime
 import os, glob
 from TwitchAPI import TwitchAPI
-from moviepy.editor import *
 
 class Twitch:
     def __init__(self): 
