@@ -7,8 +7,8 @@ __pycache__/
 # Files
 filezilla/
 *.mp4
-videos/*.json
-auth/
+clipData/*.json
+auth/*
 *.pickle
 
 # C extensions
