@@ -1,0 +1,41 @@
+{
+    "games": {
+        "CHESS": {
+            "priority": 5,
+            "real_name": "Chess",
+            "parameters": {
+                "game_id": "743"
+            }
+        },
+        "AMONGUS": {
+            "priority": 4,
+            "real_name": "Among Us",
+            "parameters": {
+                "game_id": "510218"
+            }
+        },
+        "JUSTCHATTING": {
+            "priority": 3,
+            "real_name": "Just Chatting",
+            "parameters": {
+                "game_id": "509658"
+            }
+        },
+        "MINECRAFT": {
+            "priority": 2,
+            "real_name": "Minecraft",
+            "parameters": {
+                "game_id": "27471"
+            }
+        }
+    },
+    "broadcasters": {
+        "PHILZA": {
+            "priority": 1,
+            "real_name": "Philza",
+            "parameters": {
+                "broadcaster_id": "3389768"
+            }
+        }
+    }
+}

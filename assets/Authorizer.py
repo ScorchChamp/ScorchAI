@@ -1,5 +1,4 @@
 import json
-from assets import constants
 
 class Authorizer:
     OAUTH = ""
@@ -7,7 +6,7 @@ class Authorizer:
     AUTH_DATA = ""
 
     def __init__(self, authDataFile): 
-        self.AUTH_DATA = self.readAuthFile(constants.AUTH_FILE)
+        self.AUTH_DATA = self.readAuthFile(authDataFile)
         self.OAUTH = self.getTOAUTHFromAuthData(self.AUTH_DATA)
         self.CLIENT_ID = self.getClientIdFromAuthData(self.AUTH_DATA)
     
