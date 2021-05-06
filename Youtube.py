@@ -53,7 +53,7 @@ class Youtube:
     def generateTags(self, clipID, tags = ""):
         with open('./assets/tags.txt', encoding="utf8") as file:
             tags += file.read()
-        tags += self.getTags()
+        tags += self.getTags(clipID)
         return tags
 
     def generateDescription(self, clipID = False, description = ""):
