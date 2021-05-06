@@ -6,10 +6,10 @@ __pycache__/
 
 # Files
 filezilla/
-*.mp4
-clipData/*.json
 auth/*
-
+*.mp4
+*.json
+*.pickle
 # C extensions
 *.so
 
