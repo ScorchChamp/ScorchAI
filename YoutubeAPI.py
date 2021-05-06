@@ -23,7 +23,7 @@ class YoutubeAPI:
 
     def generateStatus(self):
          status = {
-            'privacyStatus': 'private',
+            'privacyStatus': 'public',
             'selfDeclaredMadeForKids': False
         }
          return status
