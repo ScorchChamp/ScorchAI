@@ -42,8 +42,8 @@ class Twitch:
         return False
 
     def downloadClipsList(self, parameters, amount_left = 10):
-        parameters['first'] = 10
-        parameters["started_at"] = self.getTimeWithDelay(10)
+        parameters['first'] = 4
+        parameters["started_at"] = self.getTimeWithDelay(24)
         for clip in self.API.getClipsList(parameters)['data']:
             if amount_left < 1:
                 return amount_left
