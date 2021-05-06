@@ -24,7 +24,7 @@ class YoutubeAPI:
 
     def generateStatus(self, uploadDate, forKids = False):
          status = constants.VIDEO_STATUS
-         status["publishAt"] = uploadDate.isoformat()
+        #  status["publishAt"] = uploadDate.isoformat()
          return status
 
     def insert(self, request_body, file):

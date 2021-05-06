@@ -19,7 +19,6 @@ SCOPES =     ['https://www.googleapis.com/auth/youtube.upload']
 #VIDEO STATUS
 VIDEO_STATUS = {
     'privacyStatus': 'public',
-    'publishAt': "THIS SHOULD NOT BE PRINTED",
     'selfDeclaredMadeForKids': False
 }
 
