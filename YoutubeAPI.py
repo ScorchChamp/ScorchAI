@@ -30,12 +30,12 @@ class YoutubeAPI:
 
     def insert(self, request_body, file):
         print(request_body, file)
-        # mediaFile = MediaFileUpload(file)
-        # response_upload = self.SERVICE.videos().insert(
-        #     part='snippet,status',
-        #     body=request_body,
-        #     media_body= mediaFile
-        # ).execute()
+        mediaFile = MediaFileUpload(file)
+        response_upload = self.SERVICE.videos().insert(
+            part='snippet,status',
+            body=request_body,
+            media_body= mediaFile
+        ).execute()
 
     def upload_thumbnail(video_id, file):
         youtube.thumbnails().set(
