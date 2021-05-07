@@ -29,7 +29,7 @@ class YoutubeAPI:
          return status
 
     def insert(self, request_body, file):
-        print(request_body, file)
+        print(file)
         mediaFile = MediaFileUpload(file)
         response_upload = self.SERVICE.videos().insert(
             part='snippet,status',

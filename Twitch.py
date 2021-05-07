@@ -27,7 +27,7 @@ class Twitch:
             if not category:
                 print('No priority number: {}'.format(prio))
                 break
-            clips_left = self.downloadClipsList(category['parameters'], clips_left)
+            clips_left = self.downloadClipsList(category['parameters'], category['min_views'], clips_left)
             prio += 1
     
     def getNextcategory(self, priority):
@@ -41,7 +41,7 @@ class Twitch:
                 return category
         return False
 
-    def downloadClipsList(self, parameters, amount_left = 10):
+    def downloadClipsList(self, parameters, min_views = 0, amount_left = 10):
         if not "first" in parameters:
             parameters['first'] = 10
         parameters["started_at"] = self.getTimeWithDelay(24)
@@ -51,12 +51,15 @@ class Twitch:
             if os.path.isfile('./clipData/{}.json'.format(clip['id'])):
                 print("Clip already used, skipping...")
             else:
-                self.dumpClipData(clip)
-                self.API.downloadClip(
-                    clip['id'],
-                    clip['thumbnail_url'].split("-preview")[0] + ".mp4"
-                )
-                amount_left -=1
+                if not clip['view_count'] > min_views:
+                    print('Not enough views, skipping...')
+                else:
+                    self.dumpClipData(clip)
+                    self.API.downloadClip(
+                        clip['id'],
+                        clip['thumbnail_url'].split("-preview")[0] + ".mp4"
+                    )
+                    amount_left -=1
         return amount_left
     
     def dumpClipData(self, clip):
