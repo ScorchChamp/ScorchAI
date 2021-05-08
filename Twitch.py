@@ -23,7 +23,10 @@ class Twitch:
         clips_left = amount
         prio = 1
         while clips_left > 0:
+            print("clips_left: {}".format(clips_left))
+            print("prio: {}".format(prio))
             category = self.getNextcategory(prio)
+            print("category: {}".format(category))
             if not category:
                 print('No priority number: {}'.format(prio))
                 break
@@ -53,6 +56,8 @@ class Twitch:
             else:
                 if not clip['view_count'] > min_views:
                     print('Not enough views, skipping...')
+                elif not 'en' in clip['language']:
+                    print('Clip not in english... Skipping')
                 else:
                     self.dumpClipData(clip)
                     self.API.downloadClip(

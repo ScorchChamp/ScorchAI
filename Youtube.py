@@ -42,7 +42,7 @@ class Youtube:
         newDir = "./videos/uploaded_clips/{}".format(video.split("/")[-1])
         shutil.move(video, newDir)
         print("Uploading {}".format(title))
-        self.API.uploadVideo(newDir, title, description, tags)
+        # self.API.uploadVideo(newDir, title, description, tags)
 
     def getVideos(self, folder):
         videos = os.listdir(folder)
