@@ -56,11 +56,12 @@ class Youtube:
         tags += self.getTags(clipID)
         return tags
 
-    def generateDescription(self, clipID = False, description = ""):
-        if not clipID == False:
-            description = '#{} '.format(self.getBroadcaster(clipID))
+    def generateDescription(self, clipID, description = ""):
+        bc = self.getBroadcaster(clipID)
+        description = "Follow {} on https://twitch.tv/{} \n \n".format(bc, bc)
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
+        description += '\n#{} '.format(bc)
         return description
 
     def generateTitle(self, clipID):
