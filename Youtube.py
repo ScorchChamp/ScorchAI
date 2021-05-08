@@ -61,7 +61,7 @@ class Youtube:
         description = "Follow {} on https://twitch.tv/{} \n \n".format(bc, bc)
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
-        description += '\n#{} '.format(bc)
+        description += '#{} '.format(bc)
         return description
 
     def generateTitle(self, clipID):
