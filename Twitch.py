@@ -29,7 +29,7 @@ class Twitch:
             print("category: {}".format(category))
             if not category:
                 print('No priority number: {}'.format(prio))
-                break
+                exit()
             clips_left = self.downloadClipsList(category['parameters'], category['min_views'], clips_left)
             prio += 1
     
@@ -47,7 +47,9 @@ class Twitch:
     def downloadClipsList(self, parameters, min_views = 0, amount_left = 10):
         if not "first" in parameters:
             parameters['first'] = 10
-        parameters["started_at"] = self.getTimeWithDelay(24)
+        parameters["started_at"] = self.getTimeWithDelay(1)
+        print(parameters)
+        print(self.API.getClipsList(parameters))
         for clip in self.API.getClipsList(parameters)['data']:
             if amount_left < 1:
                 return amount_left
@@ -77,8 +79,8 @@ class Twitch:
             print('Cleaning clip in folder: {}'.format(f))
             os.remove(os.path.join(dir, f))
 
-    def getTimeWithDelay(self, hours = 24):
-        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(hours=hours)
+    def getTimeWithDelay(self, hours = 1):
+        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=1)
         YESTERDAY_DATE_FORMATTED = YESTERDAY_DATE_ISO.strftime("%Y-%m-%dT%H:%M:%SZ")
         return YESTERDAY_DATE_FORMATTED
 
