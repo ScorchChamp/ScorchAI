@@ -60,6 +60,8 @@ class Twitch:
                     print('Not enough views, skipping...')
                 elif not 'en' in clip['language']:
                     print('Clip not in english... Skipping')
+                elif clip['broadcaster_id'] in self.getBlacklistedCreators():
+                    print('Broadcaster blacklisted... Skipping')
                 else:
                     self.dumpClipData(clip)
                     self.API.downloadClip(
@@ -73,6 +75,12 @@ class Twitch:
         file = "./clipData/{}.json".format(clip['id'])
         with open(file, 'w') as fp:
             json.dump(clip, fp)
+
+    def getBlacklistedCreators(self):
+        with open("assets/categories.json", encoding="utf8") as file:
+            categories = json.load(file)
+            return categories['blacklisted_broadcasters']
+        
 
     def cleanFolder(self, dir):
         for f in os.listdir(dir):
