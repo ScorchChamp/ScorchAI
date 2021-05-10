@@ -46,9 +46,7 @@ class Youtube:
     def processVideo(self, video):
         videoID = video.split("/")[-1]
         newDir = "./videos/uploaded_clips/{}".format(videoID)
-        print(video, newDir)
-        os.system("ffmpeg -i {} -i ./videos/assets/subscribe.mp4 -filter_complex [1:v]colorkey=0x00FF00:0.35:0.3[ckout];[0:v][ckout]overlay[out];[0:a][1:a]amix -map [out] -ac 2 -acodec aac {}".format(video, newDir))
-        shutil.move(video, newDir+"UNEDITED.mp4")
+        shutil.move(video, newDir)
         return newDir
 
     def getVideos(self, folder):
