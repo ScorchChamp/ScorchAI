@@ -39,10 +39,17 @@ class Youtube:
         return vidData
 
     def uploadVideo(self, video, title, description, tags):
-        newDir = "./videos/uploaded_clips/{}".format(video.split("/")[-1])
-        shutil.move(video, newDir)
+        video = self.processVideo(video)
         print("Uploading {}".format(title))
-        self.API.uploadVideo(newDir, title, description, tags)
+        self.API.uploadVideo(video, title, description, tags)
+
+    def processVideo(self, video):
+        videoID = video.split("/")[-1]
+        newDir = "./videos/uploaded_clips/{}".format(videoID)
+        print(video, newDir)
+        os.system("ffmpeg -i {} -i ./videos/assets/subscribe.mp4 -filter_complex [1:v]colorkey=0x00FF00:0.35:0.3[ckout];[0:v][ckout]overlay[out];[0:a][1:a]amix -map [out] -ac 2 -acodec aac {}".format(video, newDir))
+        shutil.move(video, newDir+"UNEDITED.mp4")
+        return newDir
 
     def getVideos(self, folder):
         videos = os.listdir(folder)
