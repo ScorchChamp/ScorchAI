@@ -88,7 +88,7 @@ class Twitch:
             os.remove(os.path.join(dir, f))
 
     def getTimeWithDelay(self, hours = 1):
-        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=7)
+        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=1)
         YESTERDAY_DATE_FORMATTED = YESTERDAY_DATE_ISO.strftime("%Y-%m-%dT%H:%M:%SZ")
         return YESTERDAY_DATE_FORMATTED
 
