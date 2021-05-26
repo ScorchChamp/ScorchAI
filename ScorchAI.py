@@ -64,7 +64,7 @@ class ScorchAI:
                     clipID = filename.split(".mp4")[0]
                     bcs.append(self.youtube.getBroadcaster(clipID))
         bcs = list(dict.fromkeys(bcs))
-        return "Twitch compilation from {}, {}, {} and more!".format(bcs[0],bcs[1],bcs[2])
+        return "Compilation with {}, {}, {} and more!".format(bcs[0],bcs[1],bcs[2])
     
     def setupCompile(self, amount):
         vidAmount = len(self.getVideos('./videos/clips/'))
@@ -74,7 +74,7 @@ class ScorchAI:
         for path, subdirs, files in os.walk('./videos/clips/'):
             for filename in files:
                 if filename.endswith(".mp4"):
-                    os.system("ffmpeg -y -i ./videos/clips/{} -filter:v fps=60 -vcodec libx264 -c:a aac -preset ultrafast ./videos/prepstage/{}".format(filename, filename))
+                    os.system("ffmpeg -y -i ./videos/clips/{} -filter:v fps=60 -vcodec libx264 -c:a copy -preset ultrafast ./videos/prepstage/{}".format(filename, filename))
                     a.write("file {}\n".format(filename)) 
         a.close()
 
