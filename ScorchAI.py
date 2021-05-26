@@ -28,8 +28,10 @@ class ScorchAI:
     def compile(self, compileAmount):
         self.setupCompile(compileAmount)
         os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -af aresample=async=1000 -c:v copy -shortest -avoid_negative_ts make_zero  ./videos/uploaded_clips/output.mp4")
-        self.postCompile()
+        
         self.uploadCompilation()
+        self.postCompile()
+        
 
 
     def postCompile(self):
@@ -38,13 +40,31 @@ class ScorchAI:
     
     def uploadCompilation(self):
         video = "./videos/uploaded_clips/output.mp4"
-        title = "AUTOMATED COMPILATION TEST"
+        title = self.generateCompilationTitle()
         tags = ""
-        description = "THIS IS ONE OF THE FIRST AUTOMATED COMPILATION VIDEOS BY THE AI \n\n *DISCLAIMER* THIS WILL NOT BE A PERFECT COMPILATION! THERE MIGHT STILL BE BUGS!"
+        description = "Featuring... (expand me)\n\n\n"
+        bcs = []
+        for path, subdirs, files in os.walk('./videos/prepstage/'):
+            for filename in files:
+                if filename.endswith(".mp4"):
+                    clipID = filename.split(".mp4")[0]
+                    bcs.append(self.youtube.getBroadcaster(clipID))
+        bcs = list(dict.fromkeys(bcs))
+        for bc in bcs:
+            description += "Watch {} on https://www.twitch.tv/{} \n".format(bc, bc)
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
         self.youtube.uploadVideo(video, title, description, tags)
 
+    def generateCompilationTitle(self):
+        bcs = []
+        for path, subdirs, files in os.walk('./videos/prepstage/'):
+            for filename in files:
+                if filename.endswith(".mp4"):
+                    clipID = filename.split(".mp4")[0]
+                    bcs.append(self.youtube.getBroadcaster(clipID))
+        bcs = list(dict.fromkeys(bcs))
+        return "Twitch compilation from {}, {}, {} and more!".format(bcs[0],bcs[1],bcs[2])
     
     def setupCompile(self, amount):
         vidAmount = len(self.getVideos('./videos/clips/'))
