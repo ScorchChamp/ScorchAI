@@ -5,6 +5,10 @@ import os
 import sys
 
 class YoutubeAPI:
+    status = {
+        'privacyStatus': 'public',
+        'selfDeclaredMadeForKids': False
+    }
     def __init__(self, clientSecretsFile): 
         self.SERVICE = Create_Service(clientSecretsFile, 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
 
@@ -16,17 +20,10 @@ class YoutubeAPI:
                 'tags': tags,
                 'categoryId': 20
             },
-            'status': self.generateStatus(),
+            'status': self.status,
             'notifySubscribers': True
         }
         self.insert(request_body, file)
-
-    def generateStatus(self):
-         status = {
-            'privacyStatus': 'public',
-            'selfDeclaredMadeForKids': False
-        }
-         return status
 
     def insert(self, request_body, file):
         print(file)
@@ -35,10 +32,4 @@ class YoutubeAPI:
             part='snippet,status',
             body=request_body,
             media_body= mediaFile
-        ).execute()
-
-    def upload_thumbnail(video_id, file):
-        youtube.thumbnails().set(
-            videoId=video_id,
-            media_body=file
         ).execute()
