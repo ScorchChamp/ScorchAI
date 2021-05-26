@@ -27,21 +27,22 @@ class ScorchAI:
     
     def compile(self, compileAmount):
         self.setupCompile(compileAmount)
-        os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -c copy ./videos/uploaded_clips/output.mp4")
+        os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -af aresample=async=1000 -c:v copy -shortest -avoid_negative_ts make_zero  ./videos/uploaded_clips/output.mp4")
         self.postCompile()
+        self.uploadCompilation()
 
 
     def postCompile(self):
         self.twitch.cleanFolder('./videos/clips/')
         self.twitch.cleanFolder('./videos/prepstage/')
-        self.uploadCompilation()
     
     def uploadCompilation(self):
         video = "./videos/uploaded_clips/output.mp4"
         title = "AUTOMATED COMPILATION TEST"
         tags = ""
+        description = "THIS IS ONE OF THE FIRST AUTOMATED COMPILATION VIDEOS BY THE AI \n\n *DISCLAIMER* THIS WILL NOT BE A PERFECT COMPILATION! THERE MIGHT STILL BE BUGS!"
         with open("./assets/description.txt", encoding="utf8") as file:
-            description = file.read()
+            description += file.read()
         self.youtube.uploadVideo(video, title, description, tags)
 
     
