@@ -10,12 +10,12 @@ FILES = ["/auth/auth.json", "/auth/client_secrets.json", "/assets/categories.jso
 CLIPS_FOLDER = './videos/clips/'
 PREP_STAGE = './videos/prepstage/'
 
-for folder in FOLDERS:
-    Path(folder).mkdir(parents=False, exist_ok=True)
+# for folder in FOLDERS:
+#     Path(folder).mkdir(parents=False, exist_ok=True)
 
-for file in FILES:
-    if not not Path(file).is_file():
-        print(file + ' does not exist!')
+# for file in FILES:
+#     if not not Path(file).is_file():
+#         print(file + ' does not exist!')
 
 parser = argparse.ArgumentParser(prog='scorchai', description='Uses scorchai to process videos')
 
