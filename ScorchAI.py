@@ -2,8 +2,20 @@ from Youtube import Youtube
 from Twitch import Twitch
 import argparse
 import os
+from pathlib import Path
 
 VERSION = 3.1
+FOLDERS = ["/videos/assets", "/videos/clips", "/videos/prepstage", "/videos/uploaded_clips", "/clipData/", "/auth/", "/assets/"]
+FILES = ["/auth/auth.json", "/auth/client_secrets.json", "/assets/categories.json", "/assets/descripton.txt", ""]
+CLIPS_FOLDER = './videos/clips/'
+PREP_STAGE = './videos/prepstage/'
+
+for folder in FOLDERS:
+    Path(folder).mkdir(parents=True, exist_ok=True)
+
+for file in FILES:
+    if not not Path(file).is_file():
+        print(file + ' does not exist!')
 
 parser = argparse.ArgumentParser(prog='scorchai', description='Uses scorchai to process videos')
 
@@ -34,8 +46,8 @@ class ScorchAI:
 
 
     def postCompile(self):
-        self.twitch.cleanFolder('./videos/clips/')
-        self.twitch.cleanFolder('./videos/prepstage/')
+        self.twitch.cleanFolder(CLIPS_FOLDER)
+        self.twitch.cleanFolder(PREP_STAGE)
     
     def uploadCompilation(self):
         video = "./videos/uploaded_clips/output.mp4"
@@ -43,7 +55,7 @@ class ScorchAI:
         tags = ""
         description = "ScorchAI Compilation! \n\nEXPAND ME\n\n "
         bcs = []
-        for path, subdirs, files in os.walk('./videos/prepstage/'):
+        for path, subdirs, files in os.walk(PREP_STAGE):
             for filename in files:
                 if filename.endswith(".mp4"):
                     clipID = filename.split(".mp4")[0]
@@ -57,7 +69,7 @@ class ScorchAI:
 
     def generateCompilationTitle(self):
         bcs = []
-        for path, subdirs, files in os.walk('./videos/prepstage/'):
+        for path, subdirs, files in os.walk(PREP_STAGE):
             for filename in files:
                 if filename.endswith(".mp4"):
                     clipID = filename.split(".mp4")[0]
@@ -66,11 +78,11 @@ class ScorchAI:
         return "ScorchAI Compilation with {}, {}, {} and more!".format(bcs[0],bcs[1],bcs[2])
     
     def setupCompile(self, amount):
-        vidAmount = len(self.getVideos('./videos/clips/'))
+        vidAmount = len(self.getVideos(CLIPS_FOLDER))
         self.twitch.generateClips(amount - vidAmount)
 
         a = open("./videos/prepstage/input.txt", "w")
-        for path, subdirs, files in os.walk('./videos/clips/'):
+        for path, subdirs, files in os.walk(CLIPS_FOLDER):
             for filename in files:
                 if filename.endswith(".mp4"):
                     os.system("ffmpeg -y -i ./videos/clips/{} -filter:v fps=60 -vcodec libx264 -ar 44100 -preset ultrafast ./videos/prepstage/{}".format(filename, filename))
