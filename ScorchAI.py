@@ -3,7 +3,7 @@ from Twitch import Twitch
 import argparse
 import os
 
-VERSION = 3.0
+VERSION = 3.1
 
 parser = argparse.ArgumentParser(prog='scorchai', description='Uses scorchai to process videos')
 
@@ -27,7 +27,7 @@ class ScorchAI:
     
     def compile(self, compileAmount):
         self.setupCompile(compileAmount)
-        os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -af aresample=async=1000 -c:v copy -shortest -avoid_negative_ts make_zero  ./videos/uploaded_clips/output.mp4")
+        os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -c copy ./videos/uploaded_clips/output.mp4")
         self.uploadCompilation()
         self.postCompile()
         
@@ -73,7 +73,7 @@ class ScorchAI:
         for path, subdirs, files in os.walk('./videos/clips/'):
             for filename in files:
                 if filename.endswith(".mp4"):
-                    os.system("ffmpeg -y -i ./videos/clips/{} -filter:v fps=60 -vcodec libx264 -c:a copy -preset ultrafast ./videos/prepstage/{}".format(filename, filename))
+                    os.system("ffmpeg -y -i ./videos/clips/{} -filter:v fps=60 -vcodec libx264 -ar 44100 -preset ultrafast ./videos/prepstage/{}".format(filename, filename))
                     a.write("file {}\n".format(filename)) 
         a.close()
 
