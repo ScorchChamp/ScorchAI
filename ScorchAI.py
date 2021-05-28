@@ -5,13 +5,13 @@ import os
 from pathlib import Path
 
 VERSION = 3.1
-FOLDERS = ["/videos/assets", "/videos/clips", "/videos/prepstage", "/videos/uploaded_clips", "/clipData/", "/auth/", "/assets/"]
-FILES = ["/auth/auth.json", "/auth/client_secrets.json", "/assets/categories.json", "/assets/descripton.txt", ""]
+FOLDERS = ["/videos/", "/auth/", "/assets/", "/videos/assets", "/videos/clips", "/videos/prepstage", "/videos/uploaded_clips", "/clipData/"]
+FILES = ["/auth/auth.json", "/auth/client_secrets.json", "/assets/categories.json", "/assets/descripton.txt"]
 CLIPS_FOLDER = './videos/clips/'
 PREP_STAGE = './videos/prepstage/'
 
 for folder in FOLDERS:
-    Path(folder).mkdir(parents=True, exist_ok=True)
+    Path(folder).mkdir(parents=False, exist_ok=True)
 
 for file in FILES:
     if not not Path(file).is_file():
