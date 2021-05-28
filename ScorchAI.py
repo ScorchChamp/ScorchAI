@@ -28,7 +28,6 @@ class ScorchAI:
     def compile(self, compileAmount):
         self.setupCompile(compileAmount)
         os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -af aresample=async=1000 -c:v copy -shortest -avoid_negative_ts make_zero  ./videos/uploaded_clips/output.mp4")
-        
         self.uploadCompilation()
         self.postCompile()
         
