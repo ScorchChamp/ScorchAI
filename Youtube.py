@@ -11,15 +11,15 @@ class Youtube:
         self.twitch = Twitch()
 
     def uploadClip(self, generateWhenNoneFound):
-        videos = self.getVideos('./videos/clips/')
-        while len(videos) == 0:
+        while len(self.getVideos('./videos/clips/')) == 0:
             if generateWhenNoneFound:
                 print('Getting clips')
                 self.twitch.generateClips(1)
-                videos = self.getVideos('./videos/clips/')
             else:
                 print("No clips found... Use -g tag to generate anyway")
                 return False
+                
+        videos = self.getVideos('./videos/clips/')
 
         vidData = self.generateVidData(videos[0])
         self.uploadVideo(

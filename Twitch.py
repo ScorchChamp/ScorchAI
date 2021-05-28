@@ -22,16 +22,20 @@ class Twitch:
         self.cleanFolder('./videos/uploaded_clips/')
         clips_left = amount
         prio = 1
+        days = 1
         while clips_left > 0:
             print("clips_left: {}".format(clips_left))
             print("prio: {}".format(prio))
+            print("day: {}".format(days))
             category = self.getNextcategory(prio)
             print("category: {}".format(category))
             if not category:
-                print('No priority number: {}'.format(prio))
-                exit()
-            clips_left = self.downloadClipsList(category['parameters'], category['min_views'], clips_left)
-            prio += 1
+                print('No priority number: {}, expanding range to 2 days'.format(prio))
+                days += 1
+                prio = 1
+            else:
+                clips_left = self.downloadClipsList(category['parameters'], category['min_views'], clips_left, days)
+                prio += 1
     
     def getNextcategory(self, priority):
         for category in self.getBroadcasters():
@@ -44,12 +48,10 @@ class Twitch:
                 return category
         return False
 
-    def downloadClipsList(self, parameters, min_views = 0, amount_left = 10):
+    def downloadClipsList(self, parameters, min_views = 0, amount_left = 10, days = 1):
         if not "first" in parameters:
             parameters['first'] = 10
-        parameters["started_at"] = self.getTimeWithDelay(1)
-        print(parameters)
-        print(self.API.getClipsList(parameters))
+        parameters["started_at"] = self.getTimeWithDelay(days)
         for clip in self.API.getClipsList(parameters)['data']:
             if amount_left < 1:
                 return amount_left
@@ -87,8 +89,8 @@ class Twitch:
             print('Cleaning clip in folder: {}'.format(f))
             os.remove(os.path.join(dir, f))
 
-    def getTimeWithDelay(self, hours = 1):
-        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=1)
+    def getTimeWithDelay(self, days = 1):
+        YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=days)
         YESTERDAY_DATE_FORMATTED = YESTERDAY_DATE_ISO.strftime("%Y-%m-%dT%H:%M:%SZ")
         return YESTERDAY_DATE_FORMATTED
 

@@ -6,19 +6,16 @@ class Authorizer:
     AUTH_DATA = ""
 
     def __init__(self, authDataFile): 
-        self.AUTH_DATA = self.readAuthFile(authDataFile)
-        self.OAUTH = self.getTOAUTHFromAuthData(self.AUTH_DATA)
-        self.CLIENT_ID = self.getClientIdFromAuthData(self.AUTH_DATA)
+        self.AUTH_DATA  = self.readAuthFile(authDataFile)
+        self.OAUTH      = self.AUTH_DATA['twitch']['OAUTH']
+        self.CLIENT_ID  = self.AUTH_DATA['twitch']['client-id']
     
     def getHeaders(self):
-        return {"Authorization": self.OAUTH, "Client-Id": self.CLIENT_ID}
-        
-    def getClientIdFromAuthData(self, authData):  
-        return authData['twitch']['client-id']
-
-    def getTOAUTHFromAuthData(self, authData): 
-        return authData['twitch']['OAUTH']
-
+        return {
+            "Authorization": self.OAUTH, 
+            "Client-Id": self.CLIENT_ID
+        }
+ 
     def readAuthFile(self, authDataFile):
         with open(authDataFile) as authData:
             return json.load(authData)

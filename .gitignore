@@ -11,6 +11,8 @@ auth/*
 *.pickle
 # C extensions
 *.so
+*.mp4
+input.txt
 
 # Distribution / packaging
 .Python
