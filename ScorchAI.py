@@ -63,7 +63,7 @@ class ScorchAI:
                     clipID = filename.split(".mp4")[0]
                     bcs.append(self.youtube.getBroadcaster(clipID))
         bcs = list(dict.fromkeys(bcs))
-        return "Compilation with {}, {}, {} and more!".format(bcs[0],bcs[1],bcs[2])
+        return "ScorchAI Compilation with {}, {}, {} and more!".format(bcs[0],bcs[1],bcs[2])
     
     def setupCompile(self, amount):
         vidAmount = len(self.getVideos('./videos/clips/'))
