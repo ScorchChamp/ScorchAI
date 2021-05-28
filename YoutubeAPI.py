@@ -13,7 +13,7 @@ import sys
 
 class YoutubeAPI:
     status = {
-        'privacyStatus': 'private',
+        'privacyStatus': 'public',
         'selfDeclaredMadeForKids': False
     }
     def __init__(self, clientSecretsFile): 
@@ -80,3 +80,6 @@ class YoutubeAPI:
                 sleep_seconds = random.random() * max_sleep
                 print("Sleeping %f seconds and then retrying..." % sleep_seconds)
                 time.sleep(sleep_seconds)
+    def upload_thumbnails(self, thumbnail = False):
+        if not thumbnail:
+            print("No thumbnail specified, skipping upload")
