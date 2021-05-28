@@ -41,7 +41,7 @@ class ScorchAI:
         video = "./videos/uploaded_clips/output.mp4"
         title = self.generateCompilationTitle()
         tags = ""
-        description = "Featuring... (expand me)\n\n\n"
+        description = "ScorchAI Compilation! \n\nEXPAND ME\n\n "
         bcs = []
         for path, subdirs, files in os.walk('./videos/prepstage/'):
             for filename in files:
