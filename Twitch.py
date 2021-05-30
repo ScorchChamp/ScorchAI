@@ -66,11 +66,11 @@ class Twitch:
                     print('Broadcaster blacklisted... Skipping')
                 else:
                     self.dumpClipData(clip)
-                    self.API.downloadClip(
+                    if self.API.downloadClip(
                         clip['id'],
                         clip['thumbnail_url'].split("-preview")[0] + ".mp4"
-                    )
-                    amount_left -=1
+                    ):
+                        amount_left -=1
         return amount_left
     
     def dumpClipData(self, clip):
