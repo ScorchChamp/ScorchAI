@@ -9,8 +9,10 @@ class TwitchAPI:
     def downloadClip(self, clipID, downloadURL):
         try:    
             download_url(downloadURL, "./videos/clips/{}.mp4".format(clipID), clipID) 
+            return True
         except: 
             print("Download failed...{}".format(downloadURL))
+            return False
 
     def getClipsList(self, parameters):
         return requests.get("https://api.twitch.tv/helix/clips", parameters, headers=self.authorizer.getHeaders()).json()
