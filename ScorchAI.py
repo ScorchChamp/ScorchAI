@@ -10,13 +10,6 @@ FILES = ["/auth/auth.json", "/auth/client_secrets.json", "/assets/categories.jso
 CLIPS_FOLDER = './videos/clips/'
 PREP_STAGE = './videos/prepstage/'
 
-# for folder in FOLDERS:
-#     Path(folder).mkdir(parents=False, exist_ok=True)
-
-# for file in FILES:
-#     if not not Path(file).is_file():
-#         print(file + ' does not exist!')
-
 parser = argparse.ArgumentParser(prog='scorchai', description='Uses scorchai to process videos')
 
 parser.add_argument('-g', '--generate', action='store_true', help='Generate when no clip is found, doesnt do anything on its own')
@@ -32,20 +25,18 @@ class ScorchAI:
         self.twitch = Twitch()
 
     def runAI(self):
-        if args.compile > 0:
-            self.compile(args.compile)
+        self.compile(args.compile)
         if args.upload:  
             self.youtube.uploadClip(args.generate)
     
     def compile(self, compileAmount):
-        self.setupCompile(compileAmount)
-        os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -c copy ./videos/uploaded_clips/output.mp4")
-        self.uploadCompilation()
-        self.postCompile()
-        
-
-
-    def postCompile(self):
+        if compileAmount > 0:
+            self.setupCompile(compileAmount)
+            os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -c copy ./videos/uploaded_clips/output.mp4")
+            self.uploadCompilation()
+            self.afterCompile()
+            
+    def afterCompile(self):
         self.twitch.cleanFolder(CLIPS_FOLDER)
         self.twitch.cleanFolder(PREP_STAGE)
     
