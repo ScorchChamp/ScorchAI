@@ -29,6 +29,9 @@ class Twitch:
             print("day: {}".format(days))
             category = self.getNextcategory(prio)
             print("category: {}".format(category))
+            if days > 10:
+                print("Too many days... Quitting")
+                exit()
             if not category:
                 print('No priority number: {}, expanding range to 2 days'.format(prio))
                 days += 1
