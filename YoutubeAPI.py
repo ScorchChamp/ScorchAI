@@ -25,7 +25,7 @@ class YoutubeAPI:
                 'title': title,
                 'description': description,
                 'tags': tags,
-                'categoryId': 20
+                'categoryId': 24 
             },
             'status': self.status,
             'notifySubscribers': True
