@@ -33,7 +33,7 @@ class Twitch:
                 print("Too many days... Quitting")
                 exit()
             if not category:
-                print('No priority number: {}, expanding range to 2 days'.format(prio))
+                print('No priority number: {}, expanding range to {} days'.format(prio, days))
                 days += 1
                 prio = 1
             else:
