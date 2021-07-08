@@ -35,7 +35,7 @@ class ScorchAI:
             vid = self.getVideos(CLIPS_FOLDER)[0] + ".mp4"
             newDir = PREP_STAGE+vid
             shutil.move(CLIPS_FOLDER+vid, newDir)
-            os.system("ffmpeg -i {} -vf pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1 -c:a copy {}".format(PREP_STAGE+vid, CLIPS_FOLDER+vid))
+            os.system('ffmpeg -i {} -vf "pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1" -c:a copy {}'.format(PREP_STAGE+vid, CLIPS_FOLDER+vid))
 
         if args.upload:  
             self.youtube.uploadClip(args.generate)
