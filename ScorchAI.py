@@ -3,6 +3,7 @@ from Twitch import Twitch
 import argparse
 import os
 from pathlib import Path
+import shutil
 
 VERSION = 3.1
 FOLDERS = ["/videos/", "/auth/", "/assets/", "/videos/assets", "/videos/clips", "/videos/prepstage", "/videos/uploaded_clips", "/clipData/"]
@@ -14,6 +15,7 @@ parser = argparse.ArgumentParser(prog='scorchai', description='Uses scorchai to 
 
 parser.add_argument('-g', '--generate', action='store_true', help='Generate when no clip is found, doesnt do anything on its own')
 parser.add_argument('-u', '--upload', action='store_true', help='Upload clip')
+parser.add_argument('-s', '--short', action='store_true', help='Make shorts')
 parser.add_argument('-c', '--compile', type=int, help='Compile clips', default=0)
 parser.add_argument('-v', '--version', action='version', version='%(prog)s {}'.format(VERSION))
 
@@ -26,6 +28,15 @@ class ScorchAI:
 
     def runAI(self):
         self.compile(args.compile)
+        if args.short:
+            vidAmount = len(self.getVideos(CLIPS_FOLDER))
+            if vidAmount < 1:
+                self.twitch.generateClips(1)
+            vid = self.getVideos(CLIPS_FOLDER)[0] + ".mp4"
+            newDir = PREP_STAGE+vid
+            shutil.move(CLIPS_FOLDER+vid, newDir)
+            os.system("ffmpeg -i {} -vf pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1 -c:a copy {}".format(PREP_STAGE+vid, CLIPS_FOLDER+vid))
+
         if args.upload:  
             self.youtube.uploadClip(args.generate)
     
