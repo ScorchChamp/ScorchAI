@@ -10,7 +10,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/cornelissenl/ScorchAI">
+  <a href="https://github.com/ScorchChamp/ScorchAI">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -19,14 +19,14 @@
   <p align="center">
     Twitch Clip Bot
     <br />
-    <a href="https://github.com/cornelissenl/ScorchAI/releases/">Releases »</a>
+    <a href="https://github.com/ScorchChamp/ScorchAI/releases/">Releases »</a>
     <br />
     <br />
-    <a href="https://github.com/cornelissenl/ScorchAI">View Demo</a>
+    <a href="https://github.com/ScorchChamp/ScorchAI">View Demo</a>
     ·
-    <a href="https://github.com/cornelissenl/ScorchAI/issues">Report Bug</a>
+    <a href="https://github.com/ScorchChamp/ScorchAI/issues">Report Bug</a>
     ·
-    <a href="https://github.com/cornelissenl/ScorchAI/issues">Request Feature</a>
+    <a href="https://github.com/ScorchChamp/ScorchAI/issues">Request Feature</a>
   </p>
 </p>
 
@@ -59,7 +59,7 @@
 This bot was made after a lack of archiving of Twitch clips on youtube. I came with the idea to make a bot that automatically uploads the 24 most viewed clips per day per category. 
 
 ## Releases
-Download the latest version of [ScorchAI](https://github.com/cornelissenl/ScorchAI/releases/) and extract the ScorchAI-x.zip / ScorchAI-x.tar.gz. Make sure to read <a href="#getting-started">Getting Started</a>.
+Download the latest version of [ScorchAI](https://github.com/ScorchChamp/ScorchAI/releases/) and extract the ScorchAI-x.zip / ScorchAI-x.tar.gz. Make sure to read <a href="#getting-started">Getting Started</a>.
 
 
 
@@ -101,7 +101,7 @@ In the assets folder you should add the following files:
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/cornelissenl/ScorchAI_name.git
+   git clone https://github.com/ScorchChamp/ScorchAI_name.git
    ```
 1. Install Libraries
    ```sh
@@ -149,7 +149,7 @@ Assets/description.txt specifies the default video description. Change this to y
 
 ⚐ If the title is wrong or the content is offensive/not interesting/bad/etc please, again, contact me over at discord.
 
-👑 CONTRIBUTE: https://github.com/cornelissenl/ScorchAI
+👑 CONTRIBUTE: https://github.com/ScorchChamp/ScorchAI
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
@@ -162,7 +162,7 @@ Assets/description.txt specifies the default video description. Change this to y
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/cornelissenl/ScorchAI_name/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/ScorchChamp/ScorchAI_name/issues) for a list of proposed features (and known issues).
 
 
 
@@ -191,19 +191,19 @@ This application is <b>NOT YET</b> free to use. Contact me about fair use, if yo
 
 ScorchChamp - scorchchamp@gmail.com
 
-Project Link: [https://github.com/cornelissenl/ScorchAI_name](https://github.com/cornelissenl/ScorchAI)
+Project Link: [https://github.com/ScorchChamp/ScorchAI_name](https://github.com/ScorchChamp/ScorchAI)
 
 
-[contributors-shield]: https://img.shields.io/github/contributors/cornelissenl/ScorchAI.svg?style=for-the-badge
-[contributors-url]: https://github.com/cornelissenl/ScorchAI/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/cornelissenl/ScorchAI.svg?style=for-the-badge
-[forks-url]: https://github.com/cornelissenl/ScorchAI/network/members
-[stars-shield]: https://img.shields.io/github/stars/cornelissenl/ScorchAI.svg?style=for-the-badge
-[stars-url]: https://github.com/cornelissenl/ScorchAI/stargazers
-[issues-shield]: https://img.shields.io/github/issues/cornelissenl/ScorchAI.svg?style=for-the-badge
-[issues-url]: https://github.com/cornelissenl/ScorchAI/issues
-[license-shield]: https://img.shields.io/github/license/cornelissenl/ScorchAI.svg?style=for-the-badge
-[license-url]: https://github.com/cornelissenl/ScorchAI/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/ScorchChamp/ScorchAI.svg?style=for-the-badge
+[contributors-url]: https://github.com/ScorchChamp/ScorchAI/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/ScorchChamp/ScorchAI.svg?style=for-the-badge
+[forks-url]: https://github.com/ScorchChamp/ScorchAI/network/members
+[stars-shield]: https://img.shields.io/github/stars/ScorchChamp/ScorchAI.svg?style=for-the-badge
+[stars-url]: https://github.com/ScorchChamp/ScorchAI/stargazers
+[issues-shield]: https://img.shields.io/github/issues/ScorchChamp/ScorchAI.svg?style=for-the-badge
+[issues-url]: https://github.com/ScorchChamp/ScorchAI/issues
+[license-shield]: https://img.shields.io/github/license/ScorchChamp/ScorchAI.svg?style=for-the-badge
+[license-url]: https://github.com/ScorchChamp/ScorchAI/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/lars-cornelissen-56504520b/
 [youtube-url]: https://www.youtube.com/channel/UCYpqUStHIE9CmgDPkAmN4Sg
