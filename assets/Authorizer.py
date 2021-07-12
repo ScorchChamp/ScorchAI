@@ -15,8 +15,12 @@ class Authorizer:
         self.OAUTH      = self.AUTH_DATA['twitch']['OAUTH']
         self.CLIENT_ID  = self.AUTH_DATA['twitch']['client-id']
         self.CLIENT_SECRET  = self.AUTH_DATA['twitch']['client-secret']
-        self.REFRESH_TOKEN  = self.AUTH_DATA['twitch']['refresh-token']
-        self.REDIRECT_URI = self.AUTH_DATA['twitch']['redirect-uri']
+        try:
+            self.REFRESH_TOKEN  = self.AUTH_DATA['twitch']['refresh-token']
+            self.REDIRECT_URI = self.AUTH_DATA['twitch']['redirect-uri']
+        except:
+            self.REFRESH_TOKEN = ""
+            self.REDIRECT_URI = "https://localhost"
 
     def getHeaders(self):
         self.generateData()
