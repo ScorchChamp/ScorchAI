@@ -11,19 +11,16 @@ is_admin = False
 
 @app.route("/")
 def index():
-    res = db.getAllTables()
-    if res is None:
-        res = ""
-    return res
-
-@app.route('/runselect', methods=['GET', 'POST'])
-def login():
+    page = db.makeTableFromSelect("SELECT DISTINCT * FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'")
+    page += "<br><br><br>"
+    page += db.createHTMLFormInsertToDB("sqlite_master")
+    return page
+    
+@app.route('/runinsert', methods=['GET', 'POST'])
+def runInsert():
     if request.method == 'POST':
         session['query'] = request.form['query']
-        returnal = ""
-        for r in db.runSELECT(session['query']):
-            returnal += r[1]
-            print(r)
+        returnal = db.runINSERT(session['query'])
         return returnal
     return '''
         <form method="post">
@@ -32,12 +29,11 @@ def login():
         </form>
     '''
 
-@app.route('/logout')
-def logout():
-    # remove the username from the session if it's there
-    session.pop('username', None)
-    return redirect(url_for('index'))
-    
+@app.route('/runselect', methods=['GET', 'POST'])
+def runSelect():
+    page = db.makeTableFromSelect("SELECT * FROM twitch_channel")
+    return 
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8000', debug=True)
+    app.run(host='0.0.0.0', port='80', debug=True)
