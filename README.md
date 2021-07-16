@@ -191,7 +191,7 @@ This application is <b>NOT YET</b> free to use. Contact me about fair use, if yo
 
 ScorchChamp - scorchchamp@gmail.com
 
-Project Link: [https://github.com/ScorchChamp/ScorchAI_name](https://github.com/ScorchChamp/ScorchAI)
+Project Link: [https://github.com/ScorchChamp/ScorchAI](https://github.com/ScorchChamp/ScorchAI)
 
 
 [contributors-shield]: https://img.shields.io/github/contributors/ScorchChamp/ScorchAI.svg?style=for-the-badge
