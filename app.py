@@ -11,16 +11,16 @@ is_admin = False
 
 @app.route("/")
 def index():
-    page = db.makeTableFromSelect("SELECT DISTINCT * FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'")
+    page = db.generateTableFromQuery("SELECT DISTINCT * FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'")
     page += "<br><br><br>"
     page += db.createHTMLFormInsertToDB("sqlite_master")
     return page
     
-@app.route('/runinsert', methods=['GET', 'POST'])
+@app.route('/insertpage', methods=['GET', 'POST'])
 def runInsert():
     if request.method == 'POST':
         session['query'] = request.form['query']
-        returnal = db.runINSERT(session['query'])
+        returnal = db.generateTableFromQuery(session['query'])
         return returnal
     return '''
         <form method="post">
@@ -29,11 +29,17 @@ def runInsert():
         </form>
     '''
 
-@app.route('/runselect', methods=['GET', 'POST'])
+@app.route('/getTables', methods=['GET', 'POST'])
 def runSelect():
-    page = db.makeTableFromSelect("SELECT * FROM twitch_channel")
-    return 
+    if request.method == 'GET':
+        page = db.generateTableFromQuery("SELECT * FROM {}".format(request.form['table']))
+        return page
+
+@app.route('/test')
+def testPage():
+    page = db.generateTableFromQuery("SELECT * FROM sqlite_master")
+    return page
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='80', debug=True)
+    app.run(host='0.0.0.0', port='6969', debug=True)

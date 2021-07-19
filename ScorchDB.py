@@ -1,9 +1,11 @@
 import sqlite3
 import os
-from typing import Tuple
+from typing import List, Tuple
 
 NO_DATA_ERROR = "<b>No data found!</b>"
-ERROR_1 = "<b>ERROR 1, Please report this message:</b>"
+INSERT_SUCCEEDED = "Insertion succeedeed!"
+ERROR_1 = "<b>ERROR 1: Please report this message</b>"
+ERROR_2 = "<b>ERROR 2: </b>Data type is not List!"
 
 
 class ScorchDB:
@@ -13,19 +15,30 @@ class ScorchDB:
     def __init__(self):
         self.setupDB()
 
-    def runSELECT(self, query):
+    def generateTableFromQuery(self, query):
+        data = self.runQuery(query)
+        return self.generateTableFromCursor(data)
+
+    def runQuery(self, query):
         with sqlite3.connect(self.DATABASE_FILE) as con:
             try:
                 sel_cur = con.cursor()
                 sel_cur.execute(query) 
-                returnal = sel_cur.fetchall()
-                if len(returnal) == 0:
-                    returnal = [(0,NO_DATA_ERROR)]
-                headers = [tuple[0] for tuple in sel_cur.description]
-                returnal = headers + returnal
-                return returnal
+                return sel_cur
             except Exception as e:
                 return "{} ({})".format(ERROR_1, e)
+
+    def generateTableFromCursor(self, cur):
+        if type(cur) is str:
+            return cur
+        data = cur.fetchall()
+        if len(data) == 0:
+            return self.makeTableFromTupleList([(0,NO_DATA_ERROR)])
+        print(data)
+        headers = [tuple[0] for tuple in cur.description]
+        returnal = headers + data
+        returnal = self.makeTableFromTupleList(returnal)
+        return returnal
     
     def getTableHeaders(self, table_name):
         with sqlite3.connect(self.DATABASE_FILE) as con:
@@ -39,17 +52,6 @@ class ScorchDB:
             except Exception as e:
                 return "{} ({})".format(ERROR_1, e)
 
-
-    def runINSERT(self, query):
-        with sqlite3.connect(self.DATABASE_FILE) as con:
-            try:
-                sel_cur = con.cursor()
-                sel_cur.execute(query) 
-                return "Insert succesful!"
-            except Exception as e:
-                return "{} ({})".format(ERROR_1, e)
-
-
     def setupDB(self):
         with sqlite3.connect(self.DATABASE_FILE) as con:
             try:
@@ -62,11 +64,11 @@ class ScorchDB:
                 # print(e)
                 pass
 
-    def makeTableFromSelect(self, query):
-
-        data = self.runSELECT(query)
-        if type(data) == str:
-            return ERROR_1
+    def makeTableFromTupleList(self, tupleList):
+        data = tupleList
+        print(type(data))
+        if type(data) != list:
+            return ERROR_2
 
         returnal = "<table border='1'><tr>"
 
@@ -83,15 +85,18 @@ class ScorchDB:
         return returnal
 
     def getAllTables(self):
-        return self.runSELECT("SELECT name FROM sqlite_master")
-
+        return self.runQuery("SELECT name FROM sqlite_master")
 
     def getParametersForPriority(self, channel_id, priority):
-        return self.runSELECT("SELECT game_id, twitch_channel_id FROM categories WHERE youtube_channel_id = '%s' AND prio = %s", (channel_id, priority))
+        return self.runQuery("SELECT game_id, twitch_channel_id FROM categories WHERE youtube_channel_id = '%s' AND prio = %s", (channel_id, priority))
 
     def getHTMLTableFromTable(self, table_name):
         query = "SELECT * FROM" + str(table_name)
-        return self.makeTableFromSelect(query)
+        return self.generateTableFromCursor(self.runQuery(query))
+
+
+
+
 
 
     def createHTMLFormInsertToDB(self, table_name):
