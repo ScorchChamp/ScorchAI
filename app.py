@@ -9,35 +9,27 @@ app.secret_key = os.urandom(16)
 
 is_admin = False
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def index():
-    page = db.generateTableFromQuery("SELECT DISTINCT * FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'")
+    resultList = db.runQuery("SELECT * FROM youtube_channel", True)
+    page = db.generateTableFromTupleList(resultList)
     page += "<br><br><br>"
-    page += db.createHTMLFormInsertToDB("sqlite_master")
+    page += db.createHTMLFormInsertToDB("youtube_channel")
     return page
-    
-@app.route('/insertpage', methods=['GET', 'POST'])
-def runInsert():
-    if request.method == 'POST':
-        session['query'] = request.form['query']
-        returnal = db.generateTableFromQuery(session['query'])
-        return returnal
-    return '''
-        <form method="post">
-            <p><input type=text name=query>
-            <p><input type=submit value=Login>
-        </form>
-    '''
 
-@app.route('/getTables', methods=['GET', 'POST'])
-def runSelect():
-    if request.method == 'GET':
-        page = db.generateTableFromQuery("SELECT * FROM {}".format(request.form['table']))
-        return page
+@app.route("/", methods=['POST'])
+def insert():
+    data = request.data
+    page = ""
+    
+    return page
+
+
 
 @app.route('/test')
 def testPage():
-    page = db.generateTableFromQuery("SELECT * FROM sqlite_master")
+    resultList = db.runQuery("SELECT * FROM sqlite_master", True)
+    page = db.generateTableFromTupleList(resultList)
     return page
 
 

@@ -15,43 +15,6 @@ class ScorchDB:
     def __init__(self):
         self.setupDB()
 
-    def generateTableFromQuery(self, query):
-        data = self.runQuery(query)
-        return self.generateTableFromCursor(data)
-
-    def runQuery(self, query):
-        with sqlite3.connect(self.DATABASE_FILE) as con:
-            try:
-                sel_cur = con.cursor()
-                sel_cur.execute(query) 
-                return sel_cur
-            except Exception as e:
-                return "{} ({})".format(ERROR_1, e)
-
-    def generateTableFromCursor(self, cur):
-        if type(cur) is str:
-            return cur
-        data = cur.fetchall()
-        if len(data) == 0:
-            return self.makeTableFromTupleList([(0,NO_DATA_ERROR)])
-        print(data)
-        headers = [tuple[0] for tuple in cur.description]
-        returnal = headers + data
-        returnal = self.makeTableFromTupleList(returnal)
-        return returnal
-    
-    def getTableHeaders(self, table_name):
-        with sqlite3.connect(self.DATABASE_FILE) as con:
-            try:
-                sel_cur = con.cursor()
-                sel_cur.execute("SELECT * FROM " + str(table_name)) 
-                returnal = sel_cur.fetchall()
-                if len(returnal) == 0:
-                    returnal = [(0,NO_DATA_ERROR)]
-                return [tuple[0] for tuple in sel_cur.description]
-            except Exception as e:
-                return "{} ({})".format(ERROR_1, e)
-
     def setupDB(self):
         with sqlite3.connect(self.DATABASE_FILE) as con:
             try:
@@ -61,10 +24,23 @@ class ScorchDB:
                 cur.executescript(sql_as_string)
             except Exception as e:
                 print(e)
-                # print(e)
                 pass
 
-    def makeTableFromTupleList(self, tupleList):
+    def runQuery(self, query, with_headers = False):
+        with sqlite3.connect(self.DATABASE_FILE) as con:
+            try:
+                cur = con.cursor()
+                result = cur.execute(query).fetchall()
+                returnal = []
+                if with_headers:
+                    headers = [tpl[0] for tpl in cur.description]
+                    returnal.append(tuple(headers))
+                returnal.append(result)
+                return returnal
+            except Exception as e:
+                return "{} ({})".format(ERROR_1, e)
+
+    def generateTableFromTupleList(self, tupleList):
         data = tupleList
         print(type(data))
         if type(data) != list:
@@ -72,14 +48,15 @@ class ScorchDB:
 
         returnal = "<table border='1'><tr>"
 
-        for row in data:
-            if type(row) == str:
-                returnal += "<th>" + str(row) + "</th>"
+        for index in data:
+            if type(index) == tuple:
+                for header in index:
+                    returnal += "<th>" + str(header) + "</th>"
             else:
-                returnal += "<tr>"
-                for column in row:
-                    returnal += "<td>" + str(column) + "</td>"
-                returnal += "</tr>"
+                for row in index:
+                    returnal += "<tr>"
+                    for column in row: returnal += "<td>" + str(column) + "</td>"
+                    returnal += "</tr>"
 
         returnal += "</table>"
         return returnal
@@ -88,31 +65,21 @@ class ScorchDB:
         return self.runQuery("SELECT name FROM sqlite_master")
 
     def getParametersForPriority(self, channel_id, priority):
-        return self.runQuery("SELECT game_id, twitch_channel_id FROM categories WHERE youtube_channel_id = '%s' AND prio = %s", (channel_id, priority))
-
-    def getHTMLTableFromTable(self, table_name):
-        query = "SELECT * FROM" + str(table_name)
-        return self.generateTableFromCursor(self.runQuery(query))
-
-
-
-
-
+        return self.runQuery("SELECT game_id, twitch_channel_id FROM categories WHERE youtube_channel_id = '%s' AND prio = %s" % (channel_id, priority))
 
     def createHTMLFormInsertToDB(self, table_name):
         page = '''
         <style>
-            label, input {
-                display: block;
-            }
             label {
+                display: block; 
                 margin-bottom: 10px;
             }
+            form {max-width: 20%;}
+            input {float: right;}
         </style>
         <form method="post"><br>
         '''
-        for header in self.getTableHeaders(table_name):
-            page += "<label>{}: <input type=text name={}></label>".format(header, header)
+        for header in self.runQuery("SELECT * FROM %s" % (table_name), True)[0]:
+            page += "<label>{}: <input type=text name={} /></label>".format(header, header)
         page += '''<input type=submit value=submit></form>'''
         return page
-        
