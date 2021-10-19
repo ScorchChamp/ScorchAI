@@ -36,8 +36,7 @@ class Authorizer:
     def refreshOAUTH(self):
         print("GENERATING NEW OAUTH TOKEN")
         self.generateData()
-        url = "https://id.twitch.tv/oauth2/token?client_id={}&client_secret={}&redirect_uri={}&refresh_token={}&grant_type=refresh_token"
-        res = requests.post(url.format(self.CLIENT_ID,self.CLIENT_SECRET,self.REDIRECT_URI,self.REFRESH_TOKEN)).json()
+        res = requests.post(f"https://id.twitch.tv/oauth2/token?client_id={self.CLIENT_ID}&client_secret={self.CLIENT_SECRET}&redirect_uri={self.REDIRECT_URI}&refresh_token={self.REFRESH_TOKEN}&grant_type=refresh_token").json()
         print(res)
         self.saveRefresh(res['token_type'].capitalize() + " " + res['access_token'], res['refresh_token'])
     

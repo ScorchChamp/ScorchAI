@@ -24,16 +24,17 @@ class Twitch:
         prio = 1
         days = 1
         while clips_left > 0:
-            print("clips_left: {}".format(clips_left))
-            print("prio: {}".format(prio))
-            print("day: {}".format(days))
             category = self.getNextcategory(prio)
-            print("category: {}".format(category))
+
+            print(f"clips_left: {clips_left}")
+            print(f"prio: {prio}")
+            print(f"day: {days}")
+            print(f"category: {category}")
             if days > 10:
                 print("Too many days... Quitting")
                 exit()
             if not category:
-                print('No priority number: {}, expanding range to {} days'.format(prio, days))
+                print(f'No priority number: {prio}, expanding range to {days} days')
                 days += 1
                 prio = 1
             else:
@@ -58,7 +59,7 @@ class Twitch:
         for clip in self.API.getClipsList(parameters)['data']:
             if amount_left < 1:
                 return amount_left
-            if os.path.isfile('./clipData/{}.json'.format(clip['id'])):
+            if os.path.isfile(f"./clipData/{clip['id']}.json"):
                 print("Clip already used, skipping...")
             else:
                 if not clip['view_count'] > min_views:
@@ -77,7 +78,7 @@ class Twitch:
         return amount_left
     
     def dumpClipData(self, clip):
-        file = "./clipData/{}.json".format(clip['id'])
+        file = f"./clipData/{clip['id']}.json"
         with open(file, 'w') as fp:
             json.dump(clip, fp)
 
@@ -89,7 +90,7 @@ class Twitch:
 
     def cleanFolder(self, dir):
         for f in os.listdir(dir):
-            print('Cleaning clip in folder: {}'.format(f))
+            print(f'Cleaning clip in folder: {f}')
             os.remove(os.path.join(dir, f))
 
     def getTimeWithDelay(self, days = 1):

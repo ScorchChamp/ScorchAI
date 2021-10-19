@@ -31,21 +31,21 @@ class Youtube:
         
     def generateVidData(self, vidData):
         vidData = {
-            'videourl': './videos/clips/{}.mp4'.format(vidData),
+            'videourl': f'./videos/clips/{vidData}.mp4',
             'title': self.generateTitle(vidData),
-            'description': self.generateDescription(vidData, "#{}".format(self.getBroadcaster(vidData))),
+            'description': self.generateDescription(vidData, f"#{self.getBroadcaster(vidData)}"),
             'tags': self.generateTags(vidData)
         }
         return vidData
 
     def uploadVideo(self, video, title, description, tags):
         video = self.processVideo(video)
-        print("Uploading {}".format(title))
+        print(f"Uploading {title}")
         self.API.uploadVideo(video, title, description, tags)
 
     def processVideo(self, video):
         videoID = video.split("/")[-1]
-        newDir = "./videos/uploaded_clips/{}".format(videoID)
+        newDir = f"./videos/uploaded_clips/{videoID}"
         shutil.move(video, newDir)
         return newDir
 
@@ -63,32 +63,32 @@ class Youtube:
 
     def generateDescription(self, clipID, description = ""):
         bc = self.getBroadcaster(clipID)
-        description = "Follow {} on https://twitch.tv/{} \n \n".format(bc, bc)
+        description = f"Follow {bc} on https://twitch.tv/{bc} \n \n"
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
-        description += '#{} '.format(bc)
+        description += f'#{bc} '
         return description
 
     def generateTitle(self, clipID):
-        with open("./clipData/{}.json".format(clipID), encoding="utf8") as file:
+        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
             data = json.load(file)
-            return "{} ({})".format(data['title'], data['broadcaster_name'])
+            return f"{data['title']} ({data['broadcaster_name']})"
          
 
     def getUploadDate(self, hourOffset):
         return datetime.datetime.now() + datetime.timedelta(hours=hourOffset)
 
     def getTitle(self, clipID):
-        with open("./clipData/{}.json".format(clipID), encoding="utf8") as file:
+        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
             return json.load(file)['title']
 
     def getTags(self, clipID):
-        with open("./clipData/{}.json".format(clipID), encoding="utf8") as file:
+        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
             data = json.load(file)
             return data['broadcaster_name'] + ", " + data['title'] + ", " + data['id'] + ", "
 
     def getBroadcaster(self, clipID):
-        with open("./clipData/{}.json".format(clipID), encoding="utf8") as file:
+        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
             data = json.load(file)
             return data['broadcaster_name']
 
