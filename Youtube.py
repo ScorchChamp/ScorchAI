@@ -63,7 +63,7 @@ class Youtube:
 
     def generateDescription(self, clipID, description = ""):
         bc = self.getBroadcaster(clipID)
-        description = f"Follow {bc} on https://twitch.tv/{bc} \n \n"
+        description = f"Follow {bc} on https://twitch.tv/{bc} \n"
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
         description += f'#{bc} '
