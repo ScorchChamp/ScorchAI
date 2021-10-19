@@ -6,18 +6,19 @@ from pathlib import Path
 import shutil
 
 VERSION = 3.1
+prog = "scorchai"
+
 FOLDERS = ["/videos/", "/auth/", "/assets/", "/videos/assets", "/videos/clips", "/videos/prepstage", "/videos/uploaded_clips", "/clipData/"]
 FILES = ["/auth/auth.json", "/auth/client_secrets.json", "/assets/categories.json", "/assets/descripton.txt"]
 CLIPS_FOLDER = './videos/clips/'
 PREP_STAGE = './videos/prepstage/'
 
-parser = argparse.ArgumentParser(prog='scorchai', description='Uses scorchai to process videos')
-
+parser = argparse.ArgumentParser(prog=prog, description='Uses scorchai to process videos')
 parser.add_argument('-g', '--generate', action='store_true', help='Generate when no clip is found, doesnt do anything on its own')
 parser.add_argument('-u', '--upload', action='store_true', help='Upload clip')
 parser.add_argument('-s', '--short', action='store_true', help='Make shorts')
 parser.add_argument('-c', '--compile', type=int, help='Compile clips', default=0)
-parser.add_argument('-v', '--version', action='version', version='%(prog)s {}'.format(VERSION))
+parser.add_argument('-v', '--version', action='version', version=f'{prog} {VERSION}')
 
 args = parser.parse_args()
 
@@ -35,7 +36,7 @@ class ScorchAI:
             vid = self.getVideos(CLIPS_FOLDER)[0] + ".mp4"
             newDir = PREP_STAGE+vid
             shutil.move(CLIPS_FOLDER+vid, newDir)
-            os.system('ffmpeg -i {} -vf "pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1" -c:a copy {}'.format(PREP_STAGE+vid, CLIPS_FOLDER+vid))
+            os.system(f'ffmpeg -i {PREP_STAGE+vid} -vf "pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1" -c:a copy {CLIPS_FOLDER+vid}')
 
         if args.upload:  
             self.youtube.uploadClip(args.generate)
@@ -64,7 +65,7 @@ class ScorchAI:
                     bcs.append(self.youtube.getBroadcaster(clipID))
         bcs = list(dict.fromkeys(bcs))
         for bc in bcs:
-            description += "Watch {} on https://www.twitch.tv/{} \n".format(bc, bc)
+            description += f"Watch {bc} on https://www.twitch.tv/{bc} \n"
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
         self.youtube.uploadVideo(video, title, description, tags)
@@ -77,7 +78,7 @@ class ScorchAI:
                     clipID = filename.split(".mp4")[0]
                     bcs.append(self.youtube.getBroadcaster(clipID))
         bcs = list(dict.fromkeys(bcs))
-        return "{}, {} and {} (ScorchAI Compilation)".format(bcs[0],bcs[1],bcs[2])
+        return f"{bcs[0]}, {bcs[1]} and {bcs[2]} (ScorchAI Compilation)"
     
     def setupCompile(self, amount):
         vidAmount = len(self.getVideos(CLIPS_FOLDER))
@@ -87,8 +88,8 @@ class ScorchAI:
         for path, subdirs, files in os.walk(CLIPS_FOLDER):
             for filename in files:
                 if filename.endswith(".mp4"):
-                    os.system("ffmpeg -y -i ./videos/clips/{} -filter:v fps=60 -vcodec libx264 -ar 44100 -preset ultrafast ./videos/prepstage/{}".format(filename, filename))
-                    a.write("file {}\n".format(filename)) 
+                    os.system(f"ffmpeg -y -i ./videos/clips/{filename} -filter:v fps=60 -vcodec libx264 -ar 44100 -preset ultrafast ./videos/prepstage/{filename}")
+                    a.write(f"file {filename}\n") 
         a.close()
 
     def getVideos(self, folder):
