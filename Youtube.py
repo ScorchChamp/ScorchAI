@@ -72,7 +72,7 @@ class Youtube:
     def generateTitle(self, clipID):
         with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
             data = json.load(file)
-            return f"{data['title']} - It's All Canon"
+            return f"{data['title']} | It's All Canon"
          
 
     def getUploadDate(self, hourOffset):
