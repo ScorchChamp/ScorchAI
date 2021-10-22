@@ -17,6 +17,7 @@ parser = argparse.ArgumentParser(prog=prog, description='Uses scorchai to proces
 parser.add_argument('-g', '--generate', action='store_true', help='Generate when no clip is found, doesnt do anything on its own')
 parser.add_argument('-u', '--upload', action='store_true', help='Upload clip')
 parser.add_argument('-s', '--short', action='store_true', help='Make shorts')
+parser.add_argument('-id', '--getid', type=str, help='Get streamer ID')
 parser.add_argument('-c', '--compile', type=int, help='Compile clips', default=0)
 parser.add_argument('-v', '--version', action='version', version=f'{prog} {VERSION}')
 
@@ -40,6 +41,9 @@ class ScorchAI:
 
         if args.upload:  
             self.youtube.uploadClip(args.generate)
+
+        if args.getid:
+            print(self.getNameFromID(args.getid))
     
     def compile(self, compileAmount):
         if compileAmount > 0:
@@ -98,7 +102,8 @@ class ScorchAI:
             videos[i] = videos[i].split(".mp4")[0]
         return videos
 
-
+    def getNameFromID(self, id):
+        return self.twitch.API.getNameFromID(id)
 
 
 scai = ScorchAI(args)

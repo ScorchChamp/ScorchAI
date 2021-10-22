@@ -25,6 +25,21 @@ class TwitchAPI:
                     print(f"SOMETHING WENT WRONG: {res}")
             else:
                 return res
+    
+    def getIDFromName(self, id):
+        parameters = {
+            "login": id
+        }
+        while True: 
+            res = requests.get("https://api.twitch.tv/helix/users", parameters, headers=self.authorizer.getHeaders()).json()
+            if "error" in res:
+                print(f"Error code: {res['status']}")
+                if res["status"] == 401:
+                    self.authorizer.refreshOAUTH()
+                else:
+                    print(f"SOMETHING WENT WRONG: {res}")
+            else:
+                return res["data"][0]["id"]
 
 def download_url(url, output_path, title):
         print(f"Downloading {title}")
