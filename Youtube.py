@@ -68,7 +68,7 @@ class Youtube:
         description += f"Full VOD: {clipLink} \n"
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
-        description += f'#{bc} '
+        description += f' #{bc} '
         return description
 
     def generateTitle(self, clipID):
