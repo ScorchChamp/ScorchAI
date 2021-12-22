@@ -2,7 +2,6 @@ import Youtube
 import Twitch
 import argparse
 import os
-from pathlib import Path
 import shutil
 
 VERSION = 3.1
