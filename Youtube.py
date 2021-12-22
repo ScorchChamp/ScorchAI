@@ -63,7 +63,9 @@ class Youtube:
 
     def generateDescription(self, clipID, description = ""):
         bc = self.getBroadcaster(clipID)
-        description = f"Follow {bc} on https://twitch.tv/{bc} \n \n"
+        clipLink = self.getClipLink(clipID)
+        description = f"Follow {bc} on https://twitch.tv/{bc} \n"
+        description += f"Full VOD: {clipLink} \n"
         with open("./assets/description.txt", encoding="utf8") as file:
             description += file.read()
         description += f'#{bc} '
@@ -91,5 +93,11 @@ class Youtube:
         with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
             data = json.load(file)
             return data['broadcaster_name']
+
+            
+    def getClipLink(self, clipID):
+        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
+            data = json.load(file)
+            return data['url']
 
 

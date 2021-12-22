@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import datetime
 import os, glob
 from TwitchAPI import TwitchAPI
+import time
 
 class Twitch:
     def __init__(self): 
@@ -61,20 +62,24 @@ class Twitch:
                 return amount_left
             if os.path.isfile(f"./clipData/{clip['id']}.json"):
                 print("Clip already used, skipping...")
-            else:
-                if not clip['view_count'] > min_views:
-                    print('Not enough views, skipping...')
-                elif not 'en' in clip['language']:
-                    print('Clip not in english... Skipping')
-                elif clip['broadcaster_id'] in self.getBlacklistedCreators():
-                    print('Broadcaster blacklisted... Skipping')
-                else:
-                    self.dumpClipData(clip)
-                    if self.API.downloadClip(
-                        clip['id'],
-                        clip['thumbnail_url'].split("-preview")[0] + ".mp4"
-                    ):
-                        amount_left -=1
+                continue
+            if not clip['view_count'] > min_views:
+                print('Not enough views, skipping...')
+                continue
+
+            if not 'en' in clip['language']:
+                print('Clip not in english... Skipping')
+                continue
+
+            elif clip['broadcaster_id'] in self.getBlacklistedCreators():
+                print('Broadcaster blacklisted... Skipping')
+                continue
+            
+            self.dumpClipData(clip)
+
+            if self.API.downloadClip(clip['id'], clip['thumbnail_url'].split("-preview")[0] + ".mp4"):
+                amount_left -=1
+
         return amount_left
     
     def dumpClipData(self, clip):

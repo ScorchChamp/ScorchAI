@@ -1,6 +1,7 @@
 from assets.Authorizer import Authorizer
 import requests
 import urllib
+import time
 
 class TwitchAPI:
     def __init__(self, authFile): 
@@ -18,6 +19,7 @@ class TwitchAPI:
         while True: 
             res = requests.get("https://api.twitch.tv/helix/clips", parameters, headers=self.authorizer.getHeaders()).json()
             if "error" in res:
+                time.sleep(1)
                 print(f"Error code: {res['status']}")
                 if res["status"] == 401:
                     self.authorizer.refreshOAUTH()
