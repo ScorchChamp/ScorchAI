@@ -12,7 +12,7 @@ auth/*
 # C extensions
 *.so
 *.mp4
-input.txt
+*.txt
 
 # Distribution / packaging
 .Python

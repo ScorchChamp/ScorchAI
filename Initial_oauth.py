@@ -1,6 +1,6 @@
 import webbrowser
 import requests
-from assets.Authorizer import Authorizer
+from API.Authorizer import Authorizer
 import json
 
 AUTH_FILE = "./auth/auth.json"

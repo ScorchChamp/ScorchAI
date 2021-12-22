@@ -1,5 +1,5 @@
-from Youtube import Youtube
-from Twitch import Twitch
+import Youtube
+import Twitch
 import argparse
 import os
 from pathlib import Path
@@ -22,85 +22,79 @@ parser.add_argument('-v', '--version', action='version', version=f'{prog} {VERSI
 
 args = parser.parse_args()
 
-class ScorchAI:
-    def __init__(self, args): 
-        self.youtube = Youtube()
-        self.twitch = Twitch()
+def runAI():
+    compile(args.compile)
+    if args.short:
+        vidAmount = len(getVideos(CLIPS_FOLDER))
+        if vidAmount < 1:
+            Twitch.generateClips(1)
+        vid = getVideos(CLIPS_FOLDER)[0] + ".mp4"
+        newDir = PREP_STAGE+vid
+        shutil.move(CLIPS_FOLDER+vid, newDir)
+        os.system(f'ffmpeg -i {PREP_STAGE+vid} -vf "pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1" -c:a copy {CLIPS_FOLDER+vid}')
 
-    def runAI(self):
-        self.compile(args.compile)
-        if args.short:
-            vidAmount = len(self.getVideos(CLIPS_FOLDER))
-            if vidAmount < 1:
-                self.twitch.generateClips(1)
-            vid = self.getVideos(CLIPS_FOLDER)[0] + ".mp4"
-            newDir = PREP_STAGE+vid
-            shutil.move(CLIPS_FOLDER+vid, newDir)
-            os.system(f'ffmpeg -i {PREP_STAGE+vid} -vf "pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1" -c:a copy {CLIPS_FOLDER+vid}')
+    if args.upload:  
+        Youtube.uploadClip(args.generate)
 
-        if args.upload:  
-            self.youtube.uploadClip(args.generate)
-    
-    def compile(self, compileAmount):
-        if compileAmount > 0:
-            self.setupCompile(compileAmount)
-            os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -c copy ./videos/uploaded_clips/output.mp4")
-            self.uploadCompilation()
-            self.afterCompile()
-            
-    def afterCompile(self):
-        self.twitch.cleanFolder(CLIPS_FOLDER)
-        self.twitch.cleanFolder(PREP_STAGE)
-    
-    def uploadCompilation(self):
-        video = "./videos/uploaded_clips/output.mp4"
-        title = self.generateCompilationTitle()
-        tags = ""
-        description = "ScorchAI Compilation! \n\nEXPAND ME\n\n "
-        bcs = []
-        for path, subdirs, files in os.walk(PREP_STAGE):
-            for filename in files:
-                if filename.endswith(".mp4"):
-                    clipID = filename.split(".mp4")[0]
-                    bcs.append(self.youtube.getBroadcaster(clipID))
-        bcs = list(dict.fromkeys(bcs))
-        for bc in bcs:
-            description += f"Watch {bc} on https://www.twitch.tv/{bc} \n"
-        with open("./assets/description.txt", encoding="utf8") as file:
-            description += file.read()
-        self.youtube.uploadVideo(video, title, description, tags)
+def compile(compileAmount):
+    if compileAmount > 0:
+        setupCompile(compileAmount)
+        os.system("ffmpeg -y -f concat -safe 0 -i ./videos/prepstage/input.txt -c copy ./videos/uploaded_clips/output.mp4")
+        uploadCompilation()
+        afterCompile()
+        
+def afterCompile():
+    Twitch.cleanFolder(CLIPS_FOLDER)
+    Twitch.cleanFolder(PREP_STAGE)
 
-    def generateCompilationTitle(self):
-        bcs = []
-        for path, subdirs, files in os.walk(PREP_STAGE):
-            for filename in files:
-                if filename.endswith(".mp4"):
-                    clipID = filename.split(".mp4")[0]
-                    bcs.append(self.youtube.getBroadcaster(clipID))
-        bcs = list(dict.fromkeys(bcs))
-        return f"{bcs[0]}, {bcs[1]} and {bcs[2]} (ScorchAI Compilation)"
-    
-    def setupCompile(self, amount):
-        vidAmount = len(self.getVideos(CLIPS_FOLDER))
-        self.twitch.generateClips(amount - vidAmount)
+def uploadCompilation():
+    video = "./videos/uploaded_clips/output.mp4"
+    title = generateCompilationTitle()
+    tags = ""
+    description = "ScorchAI Compilation! \n\nEXPAND ME\n\n "
+    bcs = []
+    for path, subdirs, files in os.walk(PREP_STAGE):
+        for filename in files:
+            if filename.endswith(".mp4"):
+                clipID = filename.split(".mp4")[0]
+                bcs.append(Youtube.getBroadcaster(clipID))
+    bcs = list(dict.fromkeys(bcs))
+    for bc in bcs:
+        description += f"Watch {bc} on https://www.twitch.tv/{bc} \n"
+    with open("./assets/description.txt", encoding="utf8") as file:
+        description += file.read()
+    Youtube.uploadVideo(video, title, description, tags)
 
-        a = open("./videos/prepstage/input.txt", "w")
-        for path, subdirs, files in os.walk(CLIPS_FOLDER):
-            for filename in files:
-                if filename.endswith(".mp4"):
-                    os.system(f"ffmpeg -y -i ./videos/clips/{filename} -filter:v fps=60 -vcodec libx264 -ar 44100 -preset ultrafast ./videos/prepstage/{filename}")
-                    a.write(f"file {filename}\n") 
-        a.close()
+def generateCompilationTitle():
+    bcs = []
+    for path, subdirs, files in os.walk(PREP_STAGE):
+        for filename in files:
+            if filename.endswith(".mp4"):
+                clipID = filename.split(".mp4")[0]
+                bcs.append(Youtube.getBroadcaster(clipID))
+    bcs = list(dict.fromkeys(bcs))
+    return f"{bcs[0]}, {bcs[1]} and {bcs[2]} (ScorchAI Compilation)"
 
-    def getVideos(self, folder):
-        videos = os.listdir(folder)
-        for i in range(len(videos)):
-            videos[i] = videos[i].split(".mp4")[0]
-        return videos
+def setupCompile(amount):
+    vidAmount = len(getVideos(CLIPS_FOLDER))
+    Twitch.generateClips(amount - vidAmount)
+
+    a = open("./videos/prepstage/input.txt", "w")
+    for path, subdirs, files in os.walk(CLIPS_FOLDER):
+        for filename in files:
+            if filename.endswith(".mp4"):
+                os.system(f"ffmpeg -y -i ./videos/clips/{filename} -filter:v fps=60 -vcodec libx264 -ar 44100 -preset ultrafast ./videos/prepstage/{filename}")
+                a.write(f"file {filename}\n") 
+    a.close()
+
+def getVideos(folder):
+    videos = os.listdir(folder)
+    for i in range(len(videos)):
+        videos[i] = videos[i].split(".mp4")[0]
+    return videos
 
 
 
 
-scai = ScorchAI(args)
-scai.runAI()
+runAI()
  

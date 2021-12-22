@@ -1,25 +1,58 @@
+import pickle
+import os
+import datetime
+from google_auth_oauthlib.flow import Flow, InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
+from google.auth.transport.requests import Request
 import random
 import time
 from urllib.error import HTTPError
 import httplib2
 import http
-from assets.Google import Create_Service
 from googleapiclient.http import MediaFileUpload
 
 
+def Create_Service(client_secret_file, api_name, api_version, *scopes):
+    print(client_secret_file, api_name, api_version, scopes, sep='-')
+    CLIENT_SECRET_FILE = client_secret_file
+    API_SERVICE_NAME = api_name
+    API_VERSION = api_version
+    SCOPES = [scope for scope in scopes[0]]
+    print(SCOPES)
 
+    cred = None
 
-class YoutubeAPI:
+    pickle_file = f'./auth/token_{API_SERVICE_NAME}_{API_VERSION}.pickle'
+    print(pickle_file)
 
-    def __init__(self, clientSecretsFile): 
-        self.SERVICE = Create_Service(clientSecretsFile, 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
-        
-    def uploadVideo(self, file, title, description, tags):
-        self.insert(self.getRequestBody(title, description, tags), file)
+    if os.path.exists(pickle_file):
+        with open(pickle_file, 'rb') as token:
+            cred = pickle.load(token)
 
-    def insert(self, request_body, file):
+    if not cred or not cred.valid:
+        if cred and cred.expired and cred.refresh_token:
+            cred.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
+            cred = flow.run_local_server()
+
+        with open(pickle_file, 'wb') as token:
+            pickle.dump(cred, token)
+
+    try:
+        service = build(API_SERVICE_NAME, API_VERSION, credentials=cred)
+        print(API_SERVICE_NAME, 'service created successfully')
+        return service
+    except Exception as e:
+        print('Unable to connect.')
+        print(e)
+        return None
+
+def Upload_Video(request_body, file):
+        service = Create_Service("./auth/client_secrets.json", 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
         mediaFile = MediaFileUpload(file, chunksize=-1, resumable=True)
-        response_upload = self.SERVICE.videos().insert(
+        response_upload = service.videos().insert(
             part='snippet,status',
             body=request_body,
             media_body= mediaFile
@@ -65,22 +98,9 @@ class YoutubeAPI:
                 sleep_seconds = random.random() * max_sleep
                 print("Sleeping %f seconds and then retrying..." % sleep_seconds)
                 time.sleep(sleep_seconds)
-                
-    def upload_thumbnails(self, thumbnail = False):
-        if not thumbnail:
-            print("No thumbnail specified, skipping upload")
 
-    def getRequestBody(self, title, description, tags):
-        return {
-            'snippet': {
-                'title': title,
-                'description': description,
-                'tags': tags,
-                'categoryId': 24 
-            },
-            'status': {
-                'privacyStatus': 'public',
-                'selfDeclaredMadeForKids': False
-            },
-            'notifySubscribers': True
-        }
+
+def convert_to_RFC_datetime(year=1900, month=1, day=1, hour=0, minute=0):
+    dt = datetime.datetime(year, month, day, hour, minute, 0).isoformat() + 'Z'
+    return dt
+

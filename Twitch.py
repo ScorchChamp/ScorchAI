@@ -1,72 +1,67 @@
 import json
-from datetime import datetime, timezone 
+from datetime import datetime
 import datetime
-import os, glob
-from TwitchAPI import TwitchAPI
-import time
+import os
+import API.TwitchAPI as TwitchAPI
 
-class Twitch:
-    def __init__(self): 
-        self.API = TwitchAPI("./auth/auth.json")
+def getGames():    
+    with open("assets/categories.json", encoding="utf8") as file:
+        categories = json.load(file)
+        return categories['games']
 
-    def getGames(self):    
-        with open("assets/categories.json", encoding="utf8") as file:
-            categories = json.load(file)
-            return categories['games']
+def getBroadcasters():    
+    with open("assets/categories.json", encoding="utf8") as file:
+        categories = json.load(file)
+        return categories['broadcasters']
 
-    def getBroadcasters(self):    
-        with open("assets/categories.json", encoding="utf8") as file:
-            categories = json.load(file)
-            return categories['broadcasters']
+def generateClips(amount):
+    cleanFolder('./videos/uploaded_clips/')
+    clips_left = amount
+    prio = 1
+    days = 1
+    while clips_left > 0:
+        category = getNextcategory(prio)
 
-    def generateClips(self, amount):
-        cleanFolder('./videos/uploaded_clips/')
-        clips_left = amount
-        prio = 1
-        days = 1
-        while clips_left > 0:
-            category = self.getNextcategory(prio)
+        print(f"clips_left: {clips_left}")
+        print(f"prio: {prio}")
+        print(f"day: {days}")
+        print(f"category: {category}")
+        if daysTooHigh(days): exit()
+        if not category:
+            print(f'No priority number: {prio}, expanding range to {days} days')
+            days += 1
+            prio = 1
+        else:
+            clips_left = downloadClipsList(category['parameters'], category['min_views'], clips_left, days)
+            prio += 1
 
-            print(f"clips_left: {clips_left}")
-            print(f"prio: {prio}")
-            print(f"day: {days}")
-            print(f"category: {category}")
-            if daysTooHigh(days): exit()
-            if not category:
-                print(f'No priority number: {prio}, expanding range to {days} days')
-                days += 1
-                prio = 1
-            else:
-                clips_left = self.downloadClipsList(category['parameters'], category['min_views'], clips_left, days)
-                prio += 1
-    
-    def getNextcategory(self, priority):
-        for category in self.getBroadcasters():
-            category = self.getBroadcasters()[category]
-            if category['priority'] == priority:
-                return category
-        for category in self.getGames():
-            category = self.getGames()[category]
-            if category['priority'] == priority:
-                return category
-        return False
+def getNextcategory(priority):
+    for category in getBroadcasters():
+        category = getBroadcasters()[category]
+        if category['priority'] == priority:
+            return category
+    for category in getGames():
+        category = getGames()[category]
+        if category['priority'] == priority:
+            return category
+    return False
 
-    def downloadClipsList(self, parameters, min_views = 0, amount_left = 10, days = 1):
-        if not "first" in parameters: parameters['first'] = 10
-        parameters["started_at"] = getTimeWithDelay(days)
+def downloadClipsList(parameters, min_views = 0, amount_left = 10, days = 1):
+    if not "first" in parameters: parameters['first'] = 10
+    parameters["started_at"] = getTimeWithDelay(days)
 
-        for clip in self.API.getClipsList(parameters)['data']:
-            if amount_left < 1: return amount_left
-            if     clipAlreadyUploaded(clip):           continue
-            if     clipAlreadyUploaded(clip):           continue
-            if not clipHasEnoughViews(clip, min_views): continue
-            if not clipIsInRightLanguage(clip):         continue
-            if     clipBroadcasterIsBlacklisted(clip):  continue
+    for clip in TwitchAPI.getClipsList(parameters)['data']:
+        if amount_left < 1: return amount_left
+        if     clipAlreadyUploaded(clip):           continue
+        if     clipAlreadyUploaded(clip):           continue
+        if not clipHasEnoughViews(clip, min_views): continue
+        if not clipIsInRightLanguage(clip):         continue
+        if     clipBroadcasterIsBlacklisted(clip):  continue
 
-            dumpClipData(clip)
-            if self.API.downloadClip(clip): amount_left -=1
+        dumpClipData(clip)
+        if TwitchAPI.downloadClip(clip): amount_left -=1
 
-        return amount_left
+    return amount_left
 
 
 
