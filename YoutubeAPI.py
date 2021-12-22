@@ -1,36 +1,21 @@
-import datetime
 import random
 import time
-
 from urllib.error import HTTPError
 import httplib2
 import http
-
 from assets.Google import Create_Service
 from googleapiclient.http import MediaFileUpload
-import os
-import sys
+
+
+
 
 class YoutubeAPI:
-    status = {
-        'privacyStatus': 'public',
-        'selfDeclaredMadeForKids': False
-    }
+
     def __init__(self, clientSecretsFile): 
         self.SERVICE = Create_Service(clientSecretsFile, 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
-
+        
     def uploadVideo(self, file, title, description, tags):
-        request_body = {
-            'snippet': {
-                'title': title,
-                'description': description,
-                'tags': tags,
-                'categoryId': 24 
-            },
-            'status': self.status,
-            'notifySubscribers': True
-        }
-        self.insert(request_body, file)
+        self.insert(self.getRequestBody(title, description, tags), file)
 
     def insert(self, request_body, file):
         mediaFile = MediaFileUpload(file, chunksize=-1, resumable=True)
@@ -84,3 +69,18 @@ class YoutubeAPI:
     def upload_thumbnails(self, thumbnail = False):
         if not thumbnail:
             print("No thumbnail specified, skipping upload")
+
+    def getRequestBody(self, title, description, tags):
+        return {
+            'snippet': {
+                'title': title,
+                'description': description,
+                'tags': tags,
+                'categoryId': 24 
+            },
+            'status': {
+                'privacyStatus': 'public',
+                'selfDeclaredMadeForKids': False
+            },
+            'notifySubscribers': True
+        }

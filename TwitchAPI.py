@@ -7,12 +7,12 @@ class TwitchAPI:
     def __init__(self, authFile): 
         self.authorizer = Authorizer("./auth/auth.json")
 
-    def downloadClip(self, clipID, downloadURL):
+    def downloadClip(self, clip):
         try:    
-            download_url(downloadURL, f"./videos/clips/{clipID}.mp4", clipID) 
+            download_url(getMp4UrlFromClip(clip), f"./videos/clips/{clip['id']}.mp4", clip['id']) 
             return True
         except: 
-            print(f"Download failed...{downloadURL}")
+            print("Download failed.")
             return False
 
     def getClipsList(self, parameters):
@@ -32,4 +32,8 @@ def download_url(url, output_path, title):
         print(f"Downloading {title}")
         urllib.request.urlretrieve(url, filename=output_path)
         print("Download done!")
+
+
+def getMp4UrlFromClip(clip):
+    return clip['thumbnail_url'].split("-preview")[0] + ".mp4"
 
