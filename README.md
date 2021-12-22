@@ -14,7 +14,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">ScorchAI Twitch Bot</h3>
+  <h3 align="center">ScorchAI</h3>
 
   <p align="center">
     Twitch Clip Bot
@@ -74,17 +74,7 @@ You need to create an application over at [The Youtube Developer Console](https:
 #### WARNING: YOUR APPLICATION HAS TO BE AUDIT BY YOUTUBE TO USE IT WITHOUT IT BEING BLOCKED</b>
 
 In the assets folder you should add the following files:
-1. auth.json
-    ```json
-   {
-        "twitch": {
-            "client-id": "YOUR CLIENT ID",
-            "client-secret": "YOUR CLIENT SECRET",
-            "OAUTH": "Bearer YOUR OAUTH TOKEN"
-        }
-    }
-   ```
-2. client_secrets.json
+1. client_secrets.json
     ```json
    {
         "web": {
@@ -96,16 +86,28 @@ In the assets folder you should add the following files:
         }
     }
    ```
+2. auth.json
+   ```json
+    {
+      "twitch": {
+        "client-id": "CLIENT ID", 
+        "client-secret": "CLIENT SECRET", 
+        "redirect-uri": "probably https://localhost", 
+        "OAUTH": "OAUTH TOKEN", // This could be empty, then run initial_oauth.py once
+        "refresh-token": "REFRESH TOKEN"
+      }
+    }
+   ```
 
 ### Installation
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/ScorchChamp/ScorchAI_name.git
+    git clone https://github.com/ScorchChamp/ScorchAI_name.git
    ```
 1. Install Libraries
    ```sh
-   pip install -r requirements.txt
+    pip install -r requirements.txt
    ```
 
 
@@ -114,47 +116,45 @@ In the assets folder you should add the following files:
 
 This application can be used on multiple channels. But be aware that have a limited amount of quota with the youtube datav3 api.
 
-In TwitchDownload.py specify which games/channels you want to upload to your channel:
-   ```python
-   dc.generateClipsFromData("https://api.twitch.tv/helix/clips", {
-       "game_id": "509658",   # JUST CHATTING
-       "first": "8", 
-       "started_at": yesterday_date_formatted
-    })
+In assets/categories.json specify which games/channels you want to upload to your channel:
+   ```json
+    {
+      "games": {
+
+      },
+      "broadcasters": {
+          "SCORCHCHAMP": {
+              "priority": 1,
+              "min_views": 0,
+              "real_name": "ScorchChamp",
+              "parameters": {
+                  "first": "100",
+                  "broadcaster_id": "58251106"
+              }
+          }
+      },
+      "blacklisted_broadcasters": []
+    }
    ```
+
 
 Assets/description.txt specifies the default video description. Change this to your liking:
 
 ```
-#ScorchAI #Shorts
 👀 Check that you are subscribed!
-⚠ EXPAND ME ⚠
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 ✅ Socials:
 
 👑 Discord: https://discord.gg/5Z82Tjt 
-👑 Main Channel: https://www.youtube.com/channel/UCdWXErDsp1GJASnmLm5cUCA
 👑 Twitch: https://twitch.tv/scorchchamp
+👑 Main Channel: https://www.youtube.com/c/ScorchChamp
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-🌼 INFO ABOUT THIS CHANNEL 🌼
-
-➾ This video was uploaded via ScorchAI. This Application has been approved by YouTube Audit.
-➾ This AI is currently in its test-fase; Huge changes will be made to the AI.
-
-⚡ Do you want specific games/creators added as clips? Create a ticket over at the #create-ticket on my discord!
-
-⚐ If the title is wrong or the content is offensive/not interesting/bad/etc please, again, contact me over at discord.
-
-👑 CONTRIBUTE: https://github.com/ScorchChamp/ScorchAI
-
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-📷 VIDEO INFO 
-✍ contact me on Discord under #create-ticket with this videoID for questions or notices:
+****If you are this broadcaster, and want this video removed, please let me know in either the comments, my business e-mail or in my discord.****
+#ScorchAI #Shorts
 ```
 
 
@@ -176,15 +176,6 @@ Contributions are what make the open source community such an amazing place to b
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-
-
-<!-- LICENSE -->
-## License
-
-This application is <b>NOT YET</b> free to use. Contact me about fair use, if you want to use it.
-
-
 
 <!-- CONTACT -->
 ## Contact
