@@ -11,7 +11,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/ScorchChamp/ScorchAI">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/readme_data/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">ScorchAI</h3>
@@ -51,22 +51,21 @@
   </ol>
 </details>
 
-## <b>DISCLAIMER: THIS PROJECT IS NOT YET FREE TO USE </b>
+## <b>DISCLAIMER: THIS PROJECT IS NOT FREE TO USE, CONTACT ME FOR DETAILS </b>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-I am an IT student that took a year off to relieve some stress during covid. Now, I still wanted to program/code some fun stuff. <br>
-<br>
-During this year off many clip channels started to boom. The flaw with these channel, though, is that they require someone to download clips and reupload the all manually. <br>
+I am an IT student that took a year off to relieve some stress during covid. Now, I still wanted to program/code some fun stuff. During this year, many clip channels started to boom. The flaw with these channel, though, is that they require someone to download clips and reupload the all manually. <br>
 <br>
 Now, I wanted to make a bot that does this process automatically, thus the idea for ScorchAI. (Scorch is my IGN for most games and AI sounds cool)
 <br>
+<i>ps. the code is ugly, butit works. If you dont like it, make a pull request</i>
 <br>
 <br>
 <i>Proof of concept (121.000 views per hour on main clip channel):</i><br>
-<img src="assets/121k.png" alt="121.000 views per hour" height="150">
-<img src="assets/fullData.png" alt="1.400.000 views per day" height="150">
+<img src="assets/readme_data/121k.png" alt="121.000 views per hour" height="150">
+<img src="assets/readme_data/fullData.png" alt="1.400.000 views per day" height="150">
 
 
 ## Releases
@@ -193,7 +192,7 @@ Contributions are what make the open source community such an amazing place to b
 
 ScorchChamp - scorchchamp@gmail.com
 
-Project Link: [https://github.com/ScorchChamp/ScorchAI_name](https://github.com/ScorchChamp/ScorchAI)
+Project Link: [https://github.com/ScorchChamp/ScorchAI](https://github.com/ScorchChamp/ScorchAI)
 
 
 [contributors-shield]: https://img.shields.io/github/contributors/ScorchChamp/ScorchAI.svg?style=for-the-badge
