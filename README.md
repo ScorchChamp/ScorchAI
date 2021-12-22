@@ -56,7 +56,18 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This bot was made after a lack of archiving of Twitch clips on youtube. I came with the idea to make a bot that automatically uploads the 24 most viewed clips per day per category. 
+I am an IT student that took a year off to relieve some stress during covid. Now, I still wanted to program/code some fun stuff. <br>
+<br>
+During this year off many clip channels started to boom. The flaw with these channel, though, is that they require someone to download clips and reupload the all manually. <br>
+<br>
+Now, I wanted to make a bot that does this process automatically, thus the idea for ScorchAI. (Scorch is my IGN for most games and AI sounds cool)
+<br>
+<br>
+<br>
+<i>Proof of concept (121.000 views per hour on main clip channel):</i><br>
+<img src="assets/121k.png" alt="121.000 views per hour" height="150">
+<img src="assets/fullData.png" alt="1.400.000 views per day" height="150">
+
 
 ## Releases
 Download the latest version of [ScorchAI](https://github.com/ScorchChamp/ScorchAI/releases/) and extract the ScorchAI-x.zip / ScorchAI-x.tar.gz. Make sure to read <a href="#getting-started">Getting Started</a>.
@@ -67,11 +78,11 @@ Download the latest version of [ScorchAI](https://github.com/ScorchChamp/ScorchA
 ## Getting Started
 
 To get a local copy up and running follow these simple steps.
+#### WARNING: YOUR APPLICATION HAS TO GO THROUGH AUDIT BY YOUTUBE TO USE IT WITHOUT IT BEING BLOCKED</b>
 
 ### Prerequisites
 
 You need to create an application over at [The Youtube Developer Console](https://console.cloud.google.com/apis/dashboard) with the Data APIv3. When you first run your application, you should get a link where you can accept your request.
-#### WARNING: YOUR APPLICATION HAS TO BE AUDIT BY YOUTUBE TO USE IT WITHOUT IT BEING BLOCKED</b>
 
 In the assets folder you should add the following files:
 1. client_secrets.json
@@ -92,9 +103,9 @@ In the assets folder you should add the following files:
       "twitch": {
         "client-id": "CLIENT ID", 
         "client-secret": "CLIENT SECRET", 
-        "redirect-uri": "probably https://localhost", 
-        "OAUTH": "OAUTH TOKEN", // This could be empty, then run initial_oauth.py once
-        "refresh-token": "REFRESH TOKEN"
+        "redirect-uri": "REDIRECT URI", // Probably https://localhost
+        "OAUTH": "OAUTH TOKEN", // This could be empty, then you should run initial_oauth.py once
+        "refresh-token": "REFRESH TOKEN" // Used to reset the oauth token if it runs out (happens like 10x a day)
       }
     }
    ```
