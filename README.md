@@ -60,7 +60,7 @@ I am an IT student that took a year off to relieve some stress during covid. Now
 <br>
 Now, I wanted to make a bot that does this process automatically, thus the idea for ScorchAI. (Scorch is my IGN for most games and AI sounds cool)
 <br>
-<i>ps. the code is ugly, butit works. If you dont like it, make a pull request</i>
+<i>ps. the code is ugly, but it works. If you dont like it, make a pull request</i>
 <br>
 <br>
 <i>Proof of concept (121.000 views per hour on main clip channel):</i><br>
