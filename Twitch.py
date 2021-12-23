@@ -4,100 +4,66 @@ import datetime
 import os
 import API.TwitchAPI as TwitchAPI
 
-def getGames():    
-    with open("assets/categories.json", encoding="utf8") as file:
-        categories = json.load(file)
-        return categories['games']
+CATEGORIES_FILE = "assets/categories.json"
+UPLOADED_CLIPS_FOLDER = './videos/uploaded_clips/'
 
-def getBroadcasters():    
-    with open("assets/categories.json", encoding="utf8") as file:
-        categories = json.load(file)
-        return categories['broadcasters']
+def getJsonContents(file):      return json.load(open(file, encoding="utf8"))
+def getGames():                 return getJsonContents(CATEGORIES_FILE)['games']
+def getBroadcasters():          return getJsonContents(CATEGORIES_FILE)['broadcasters']
+def getBlacklistedCreators():   return getJsonContents(CATEGORIES_FILE)['broadcasters']
+
+def clipIsInRightLanguage(clip, language = 'en'):   return 'en' in clip['language']
+def clipHasEnoughViews(clip, min_views):            return clip['view_count'] > min_views
+def clipBroadcasterIsBlacklisted(clip):             return clip['broadcaster_id'] in getBlacklistedCreators()
+def clipAlreadyUploaded(clip):                      return os.path.isfile(f"./clipData/{clip['id']}.json")
+def daysTooHigh(days):                              return days > 365
+
+def isClipViable(clip, category):
+    if     clipAlreadyUploaded(clip):           return False
+    if     clipAlreadyUploaded(clip):           return False
+    if not clipHasEnoughViews(clip, category['min_views']): return False
+    if not clipIsInRightLanguage(clip):         return False
+    if     clipBroadcasterIsBlacklisted(clip):  return False
+    return True
+
 
 def generateClips(amount):
-    cleanFolder('./videos/uploaded_clips/')
-    clips_left = amount
-    prio = 1
-    days = 1
-    while clips_left > 0:
-        category = getNextcategory(prio)
+    emptyFolder(UPLOADED_CLIPS_FOLDER)
+    for i in range(amount):
+        generateClip()
 
-        print(f"clips_left: {clips_left}")
-        print(f"prio: {prio}")
-        print(f"day: {days}")
-        print(f"category: {category}")
-        if daysTooHigh(days): exit()
-        if not category:
-            print(f'No priority number: {prio}, expanding range to {days} days')
-            days += 1
-            prio = 1
-        else:
-            clips_left = downloadClipsList(category['parameters'], category['min_views'], clips_left, days)
-            prio += 1
+
+def generateClip():
+    current_priority = 1
+    current_day = 1
+    current_category = getNextcategory(current_priority)
+    if not current_category:
+        current_day += 1
+        current_priority = 1
+    else:
+        current_priority += 1
+        clip = getNextViableClip(current_category)
+        dumpClipData(clip)
+        TwitchAPI.downloadClip(clip)
+
+    if daysTooHigh(current_day): return
+    
+def getNextViableClip(category):
+    parameters = category['parameters']
+    if not "first" in parameters: parameters['first'] = 10
+    clip_list = TwitchAPI.getClipsList(parameters)
+
+    for clip in clip_list:
+        if isClipViable(clip, category): return clip
 
 def getNextcategory(priority):
     for category in getBroadcasters():
         category = getBroadcasters()[category]
-        if category['priority'] == priority:
-            return category
+        if category['priority'] == priority: return category
     for category in getGames():
         category = getGames()[category]
-        if category['priority'] == priority:
-            return category
-    return False
+        if category['priority'] == priority: return category
 
-def downloadClipsList(parameters, min_views = 0, amount_left = 10, days = 1):
-    if not "first" in parameters: parameters['first'] = 10
-    parameters["started_at"] = getTimeWithDelay(days)
-
-    for clip in TwitchAPI.getClipsList(parameters)['data']:
-        if amount_left < 1: return amount_left
-        if     clipAlreadyUploaded(clip):           continue
-        if     clipAlreadyUploaded(clip):           continue
-        if not clipHasEnoughViews(clip, min_views): continue
-        if not clipIsInRightLanguage(clip):         continue
-        if     clipBroadcasterIsBlacklisted(clip):  continue
-
-        dumpClipData(clip)
-        if TwitchAPI.downloadClip(clip): amount_left -=1
-
-    return amount_left
-
-
-
-
-
-
-def clipBroadcasterIsBlacklisted(clip):
-    if clip['broadcaster_id'] in getBlacklistedCreators():
-        print('Broadcaster blacklisted')
-        return True
-    return False
-
-def clipIsInRightLanguage(clip, language = 'en'):
-    if 'en' in clip['language']:
-        return True
-    print('Clip not in english')
-    return False
-
-def daysTooHigh(days):
-    if days > 10:
-        print("Too many days")
-        return True
-    return False
-
-
-def clipHasEnoughViews(clip, min_views):
-    if clip['view_count'] > min_views:
-        return True
-    print('Not enough views')
-    return False
-    
-
-def clipAlreadyUploaded(clip):
-    if os.path.isfile(f"./clipData/{clip['id']}.json"):
-        print(f"Clip {clip['id']} already used")
-        return True
     return False
 
 def dumpClipData(clip):
@@ -105,16 +71,9 @@ def dumpClipData(clip):
     with open(file, 'w') as fp:
         json.dump(clip, fp)
 
-def getBlacklistedCreators():
-    with open("assets/categories.json", encoding="utf8") as file:
-        categories = json.load(file)
-        return categories['blacklisted_broadcasters']
-    
-
-def cleanFolder( dir):
+def emptyFolder(dir):
     for f in os.listdir(dir):
         os.remove(os.path.join(dir, f))
-
 
 def getTimeWithDelay( days = 1):
     YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=days)

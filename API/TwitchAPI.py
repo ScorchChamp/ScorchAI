@@ -22,7 +22,7 @@ def getClipsList(parameters):
             else:
                 print(f"SOMETHING WENT WRONG: {res}")
         else:
-            return res
+            return res['data']
 
 def download_url(url, output_path, title):
         print(f"Downloading {title}")
