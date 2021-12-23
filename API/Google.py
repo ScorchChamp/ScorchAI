@@ -50,6 +50,7 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
         return None
 
 def Upload_Video(request_body, file):
+        print(f"Uploading {file}")
         service = Create_Service("./auth/client_secrets.json", 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
         mediaFile = MediaFileUpload(file, chunksize=-1, resumable=True)
         response_upload = service.videos().insert(

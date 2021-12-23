@@ -7,31 +7,29 @@ import API.TwitchAPI as TwitchAPI
 CATEGORIES_FILE = "assets/categories.json"
 UPLOADED_CLIPS_FOLDER = './videos/uploaded_clips/'
 
-def getJsonContents(file):      return json.load(open(file, encoding="utf8"))
-def getGames():                 return getJsonContents(CATEGORIES_FILE)['games']
-def getBroadcasters():          return getJsonContents(CATEGORIES_FILE)['broadcasters']
-def getBlacklistedCreators():   return getJsonContents(CATEGORIES_FILE)['broadcasters']
+def getJsonContents(file):                                  return json.load(open(file, encoding="utf8"))
+def getGames():                                             return getJsonContents(CATEGORIES_FILE)['games']
+def getBroadcasters():                                      return getJsonContents(CATEGORIES_FILE)['broadcasters']
+def getBlacklistedCreators():                               return getJsonContents(CATEGORIES_FILE)['blacklisted_broadcasters']
 
-def clipIsInRightLanguage(clip, language = 'en'):   return 'en' in clip['language']
-def clipHasEnoughViews(clip, min_views):            return clip['view_count'] > min_views
-def clipBroadcasterIsBlacklisted(clip):             return clip['broadcaster_id'] in getBlacklistedCreators()
-def clipAlreadyUploaded(clip):                      return os.path.isfile(f"./clipData/{clip['id']}.json")
-def daysTooHigh(days):                              return days > 365
+def clipIsInRightLanguage(clip, language = 'en'):           return 'en' in clip['language']
+def clipHasEnoughViews(clip, min_views):                    return clip['view_count'] > min_views
+def clipBroadcasterIsBlacklisted(clip):                     return clip['broadcaster_id'] in getBlacklistedCreators()
+def clipAlreadyUploaded(clip):                              return os.path.isfile(f"./clipData/{clip['id']}.json")
+def daysTooHigh(days):                                      return days > 365
 
 def isClipViable(clip, category):
-    if     clipAlreadyUploaded(clip):           return False
-    if     clipAlreadyUploaded(clip):           return False
+    if     clipAlreadyUploaded(clip):                       return False
+    if     clipAlreadyUploaded(clip):                       return False
     if not clipHasEnoughViews(clip, category['min_views']): return False
-    if not clipIsInRightLanguage(clip):         return False
-    if     clipBroadcasterIsBlacklisted(clip):  return False
+    if not clipIsInRightLanguage(clip):                     return False
+    if     clipBroadcasterIsBlacklisted(clip):              return False
     return True
 
 
 def generateClips(amount):
     emptyFolder(UPLOADED_CLIPS_FOLDER)
-    for i in range(amount):
-        generateClip()
-
+    for i in range(amount): generateClip()
 
 def generateClip():
     current_priority = 1
