@@ -2,10 +2,14 @@ import API.Authorizer as Authorizer
 import requests
 import urllib
 import time
+CLIPS_FOLDER = './videos/clips/'
+PREP_STAGE = './videos/prepstage/'
+READY_STAGE = './videos/ready_to_upload/'
+UPLOADED_STAGE = './videos/uploaded_clips/'
 
 def downloadClip(clip):
     try:    
-        download_url(getMp4UrlFromClip(clip), f"./videos/clips/{clip['id']}.mp4", clip['id']) 
+        download_url(getMp4UrlFromClip(clip), f"{READY_STAGE}{clip['id']}.mp4", clip['id']) 
         return True
     except: 
         print("Download failed.")

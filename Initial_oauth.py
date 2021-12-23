@@ -17,5 +17,6 @@ with open(AUTH_FILE) as f:
 
 data["twitch"]["refresh-token"] = res["refresh_token"]
 data["twitch"]["OAUTH"] = f"{res['token_type']} {res['access_token']}"
+
 with open(AUTH_FILE, 'w') as f:
     json.dump(data, f)

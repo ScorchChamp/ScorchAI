@@ -7,19 +7,10 @@ AUTH_DATA = ""
 CLIENT_SECRET = ""
 REFRESH_TOKEN  = ""
 REDIRECT_URI = ""
-authDataFile = "./auth/auth.json"
+AUTH_DATA_FILE = "./auth/auth.json"
     
 def generateData():
     AUTH_DATA  = readAuthFile()
-    OAUTH      = AUTH_DATA['twitch']['OAUTH']
-    CLIENT_ID  = AUTH_DATA['twitch']['client-id']
-    CLIENT_SECRET  = AUTH_DATA['twitch']['client-secret']
-    try:
-        REFRESH_TOKEN  = AUTH_DATA['twitch']['refresh-token']
-        REDIRECT_URI = AUTH_DATA['twitch']['redirect-uri']
-    except:
-        REFRESH_TOKEN = ""
-        REDIRECT_URI = "https://localhost"
     return {
         'client_id': AUTH_DATA['twitch']['client-id'],
         'client_secret': AUTH_DATA['twitch']['client-secret'],
@@ -36,8 +27,7 @@ def getHeaders():
     }
 
 def readAuthFile():
-    with open(authDataFile) as authData:
-        return json.load(authData)
+    return json.load(open(AUTH_DATA_FILE))
 
 def refreshOAUTH():
     print("GENERATING NEW OAUTH TOKEN")
@@ -47,12 +37,9 @@ def refreshOAUTH():
     saveRefresh(res['token_type'].capitalize() + " " + res['access_token'], res['refresh_token'])
 
 def saveRefresh(oauth_token, refresh_token):
-    with open(authDataFile) as f:
-        data = json.load(f)
+    data = generateData()
+    data["refresh-token"] = refresh_token
+    data["OAUTH"] = oauth_token
 
-    data["twitch"]["refresh-token"] = refresh_token
-    data["twitch"]["OAUTH"] = oauth_token
-    with open(authDataFile, 'w') as f:
+    with open(AUTH_DATA_FILE, 'w') as f:
         json.dump(data, f)
-
-generateData()

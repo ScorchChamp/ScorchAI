@@ -37,12 +37,13 @@ def generateClip():
     gotten_clip = False
     while not gotten_clip:
         current_category = getNextcategory(current_priority)
+        print(f"prio: {current_priority}, day: {current_day}")
         if not current_category:
             current_priority = 1
             current_day += 1
             if daysTooHigh(current_day): return False
         else:
-            clip = getNextViableClip(current_category)
+            clip = getNextViableClip(current_category, current_day)
             if clip:
                 dumpClipData(clip)
                 TwitchAPI.downloadClip(clip)
@@ -50,8 +51,9 @@ def generateClip():
             current_priority += 1
 
     
-def getNextViableClip(category):
+def getNextViableClip(category, days = 1):
     parameters = category['parameters']
+    parameters["started_at"] = getTimeWithDelay(days)
     if not "first" in parameters: parameters['first'] = 10
     clip_list = TwitchAPI.getClipsList(parameters)
 
@@ -78,7 +80,7 @@ def emptyFolder(dir):
     for f in os.listdir(dir):
         os.remove(os.path.join(dir, f))
 
-def getTimeWithDelay( days = 1):
+def getTimeWithDelay(days = 1):
     YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=days)
     YESTERDAY_DATE_FORMATTED = YESTERDAY_DATE_ISO.strftime("%Y-%m-%dT%H:%M:%SZ")
     return YESTERDAY_DATE_FORMATTED
