@@ -34,20 +34,15 @@ def generateVidData(vidData):
     return vidData
 
 def uploadVideo(video, title, description, tags):
-    video = processVideo(video)
-    YoutubeAPI.uploadVideo(video, title, description, tags)
+    YoutubeAPI.uploadVideo(processVideo(video), title, description, tags)
 
 def processVideo(video):
-    videoID = video.split("/")[-1]
-    newDir = f"./videos/uploaded_clips/{videoID}"
+    newDir = f"./videos/uploaded_clips/{getVideoID(video)}"
     shutil.move(video, newDir)
     return newDir
 
 def getVideos(folder):
-    videos = os.listdir(folder)
-    for i in range(len(videos)):
-        videos[i] = videos[i].split(".mp4")[0]
-    return videos
+    return [video.split(".mp4")[0] for video in os.listdir(folder)]
         
 def generateTags(clipID):
     return f"{getTagsTemplate()}, {getTags(clipID)}"
@@ -56,6 +51,7 @@ def generateDescription(clipID):
     bc = getBroadcaster(clipID)
     return f"Follow {bc} on https://twitch.tv/{bc} \nFull VOD: {getClipLink(clipID)} \n{getDescriptionTemplate()} #{bc}"
 
+def getVideoID(video):          return video.split("/")[-1]
 def getTagsTemplate():          return open("./assets/tags.txt", encoding="utf8").read()
 def getDescriptionTemplate():   return open("./assets/description.txt", encoding="utf8").read()
 def getUploadDate(hourOffset):  return datetime.datetime.now() + datetime.timedelta(hours=hourOffset)

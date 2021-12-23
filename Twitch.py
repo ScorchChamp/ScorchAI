@@ -16,7 +16,7 @@ def clipIsInRightLanguage(clip, language = 'en'):           return 'en' in clip[
 def clipHasEnoughViews(clip, min_views):                    return clip['view_count'] > min_views
 def clipBroadcasterIsBlacklisted(clip):                     return clip['broadcaster_id'] in getBlacklistedCreators()
 def clipAlreadyUploaded(clip):                              return os.path.isfile(f"./clipData/{clip['id']}.json")
-def daysTooHigh(days):                                      return days > 365
+def daysTooHigh(days):                                      return days > 5
 
 def isClipViable(clip, category):
     if     clipAlreadyUploaded(clip):                       return False
@@ -29,22 +29,26 @@ def isClipViable(clip, category):
 
 def generateClips(amount):
     emptyFolder(UPLOADED_CLIPS_FOLDER)
-    for i in range(amount): generateClip()
+    [generateClip() for i in range(amount)]
 
 def generateClip():
     current_priority = 1
     current_day = 1
-    current_category = getNextcategory(current_priority)
-    if not current_category:
-        current_day += 1
-        current_priority = 1
-    else:
-        current_priority += 1
-        clip = getNextViableClip(current_category)
-        dumpClipData(clip)
-        TwitchAPI.downloadClip(clip)
+    gotten_clip = False
+    while not gotten_clip:
+        current_category = getNextcategory(current_priority)
+        if not current_category:
+            current_priority = 1
+            current_day += 1
+            if daysTooHigh(current_day): return False
+        else:
+            clip = getNextViableClip(current_category)
+            if clip:
+                dumpClipData(clip)
+                TwitchAPI.downloadClip(clip)
+                gotten_clip = True
+            current_priority += 1
 
-    if daysTooHigh(current_day): return
     
 def getNextViableClip(category):
     parameters = category['parameters']
@@ -53,6 +57,7 @@ def getNextViableClip(category):
 
     for clip in clip_list:
         if isClipViable(clip, category): return clip
+    return False
 
 def getNextcategory(priority):
     for category in getBroadcasters():
