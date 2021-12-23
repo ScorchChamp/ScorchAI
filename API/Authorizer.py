@@ -12,11 +12,11 @@ AUTH_DATA_FILE = "./auth/auth.json"
 def generateData():
     AUTH_DATA  = readAuthFile()
     return {
-        'client_id': AUTH_DATA['twitch']['client-id'],
-        'client_secret': AUTH_DATA['twitch']['client-secret'],
-        'redirect_uri': AUTH_DATA['twitch']['redirect-uri'],
-        'refresh_token': AUTH_DATA['twitch']['refresh-token'],
-        'oauth': AUTH_DATA['twitch']['OAUTH']
+        'client_id': AUTH_DATA['client_id'],
+        'client_secret': AUTH_DATA['client_secret'],
+        'redirect_uri': AUTH_DATA['redirect_uri'],
+        'refresh_token': AUTH_DATA['refresh_token'],
+        'oauth': AUTH_DATA['oauth']
     }
 
 def getHeaders():
@@ -38,8 +38,8 @@ def refreshOAUTH():
 
 def saveRefresh(oauth_token, refresh_token):
     data = generateData()
-    data["refresh-token"] = refresh_token
-    data["OAUTH"] = oauth_token
+    data["refresh_token"] = refresh_token
+    data["oauth"] = oauth_token
 
     with open(AUTH_DATA_FILE, 'w') as f:
         json.dump(data, f)
