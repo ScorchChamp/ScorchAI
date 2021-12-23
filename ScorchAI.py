@@ -31,7 +31,7 @@ def runAI():
     if args.short:
         if getVideoReadyAmount() < 1: Twitch.generateClips(1)
         vid = getNextVideo()
-        shutil.move(CLIPS_FOLDER+vid, PREP_STAGE+vid)
+        shutil.move(READY_STAGE+vid, PREP_STAGE+vid)
         os.system(f'ffmpeg -i {PREP_STAGE+vid} -vf "pad=iw:2*trunc(iw*16/18):(ow-iw)/2:(oh-ih)/2,setsar=1" -c:a copy {READY_STAGE+vid}')
 
     if args.upload:  
@@ -92,8 +92,8 @@ def setupCompile(amount):
 
 def getVideos(folder):      return [getVideoName(video) for video in os.listdir(folder)]
 def getVideoName(video):    return video.split(".mp4")[0]
-def getNextVideo():         return getVideos(CLIPS_FOLDER)[0] + ".mp4"
-def getVideoReadyAmount():  return len(getVideos(CLIPS_FOLDER))
+def getNextVideo():         return getVideos(READY_STAGE)[0] + ".mp4"
+def getVideoReadyAmount():  return len(getVideos(READY_STAGE))
 def cleanFolder(folder):    [os.remove(folder+f) for f in os.listdir(folder)]
 
 runAI()

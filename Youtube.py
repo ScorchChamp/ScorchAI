@@ -52,7 +52,7 @@ def getTitle(clipID):           return getClipData(clipID)['title']
 def getBroadcaster(clipID):     return getClipData(clipID)['broadcaster_name']
 def generateTags(clipID):       return f"{getTagsTemplate()}, {getTags(clipID)}"
 def getTags(clipID):            return f"{getBroadcaster(clipID)}, {getTitle(clipID)}, {clipID}, "
-def generateTitle(clipID):      return f"{getTitle(clipID)} <|> {getBroadcaster(clipID)}"
+def generateTitle(clipID):      return f"{getTitle(clipID)} - {getBroadcaster(clipID)}"
 
 
 def getVideoName(video):    return video.split(".mp4")[0]
