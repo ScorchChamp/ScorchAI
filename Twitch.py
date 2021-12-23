@@ -16,7 +16,7 @@ def clipIsInRightLanguage(clip, language = 'en'):           return 'en' in clip[
 def clipHasEnoughViews(clip, min_views):                    return clip['view_count'] > min_views
 def clipBroadcasterIsBlacklisted(clip):                     return clip['broadcaster_id'] in getBlacklistedCreators()
 def clipAlreadyUploaded(clip):                              return os.path.isfile(f"./clipData/{clip['id']}.json")
-def daysTooHigh(days):                                      return days > 5
+def daysTooHigh(days):                                      return days > 7
 
 def isClipViable(clip, category):
     if     clipAlreadyUploaded(clip):                       return False
