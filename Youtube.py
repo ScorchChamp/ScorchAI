@@ -28,7 +28,7 @@ def generateVidData(clipID):
 
 
 def processVideo(videoData):
-    newDir = f"{READY_STAGE+videoData['title']}"
+    newDir = f"{READY_STAGE+videoData['id']}"
     shutil.move(videoData['videourl'], newDir)
     return newDir
 
