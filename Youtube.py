@@ -47,7 +47,7 @@ def getUploadDate(hourOffset):  return datetime.datetime.now() + datetime.timede
 def getJsonContents(file):      return json.load(open(file, encoding="utf8"))
 def getClipData(clipID):        return getJsonContents(f"./clipData/{clipID}.json")
 
-def getVodLink(clipID):         return getClipData(clipID)['video_id']
+def getVodLink(clipID):         return f"https://twitch.tv/{getClipData(clipID)['video_id']}"
 def getClipLink(clipID):        return getClipData(clipID)['url']
 def getTitle(clipID):           return getClipData(clipID)['title']
 def getBroadcaster(clipID):     return getClipData(clipID)['broadcaster_name']
