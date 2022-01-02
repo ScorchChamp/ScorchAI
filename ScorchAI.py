@@ -3,6 +3,7 @@ import Twitch
 import argparse
 import os
 import shutil
+import API.TwitchAPI as TwitchAPI
 
 VERSION = 3.1
 prog = "scorchai"
@@ -19,11 +20,15 @@ parser.add_argument('-g', '--generate', action='store_true', help='Generate when
 parser.add_argument('-u', '--upload', action='store_true', help='Upload clip')
 parser.add_argument('-s', '--short', action='store_true', help='Make shorts')
 parser.add_argument('-c', '--compile', type=int, help='Compile clips', default=0)
+parser.add_argument('-i', '--id', type=str)
 parser.add_argument('-v', '--version', action='version', version=f'{prog} {VERSION}')
 
 args = parser.parse_args()
 
 def runAI():
+    if args.id:
+        print(TwitchAPI.getChannelID(args.id))
+        exit()
     cleanFolder(CLIPS_FOLDER)
     cleanFolder(PREP_STAGE)
     cleanFolder(UPLOADED_STAGE)

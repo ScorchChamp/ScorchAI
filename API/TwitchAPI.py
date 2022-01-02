@@ -7,6 +7,23 @@ PREP_STAGE = './videos/prepstage/'
 READY_STAGE = './videos/ready_to_upload/'
 UPLOADED_STAGE = './videos/uploaded_clips/'
 
+def getChannelID(name):
+    parameters = {
+        "login": name
+    }
+    while True: 
+        res = requests.get("https://api.twitch.tv/helix/users", parameters, headers=Authorizer.getHeaders()).json()
+        if "error" in res:
+            time.sleep(1)
+            print(f"Error code: {res['status']}")
+            if res["status"] == 401:
+               Authorizer.refreshOAUTH()
+            else:
+                print(f"SOMETHING WENT WRONG: {res}")
+        else:
+            return res['data'][0]["id"]
+
+
 def downloadClip(clip):
     try:    
         download_url(getMp4UrlFromClip(clip), f"{READY_STAGE}{clip['id']}.mp4", clip['id']) 
