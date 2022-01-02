@@ -34,7 +34,7 @@ def processVideo(videoData):
 
 def generateDescription(clipID):
     bc = getBroadcaster(clipID)
-    return f"Follow {bc} on https://twitch.tv/{bc} \nFull VOD: {getClipLink(clipID)} \n{getDescriptionTemplate()} #{bc}"
+    return f"Follow {bc} on https://twitch.tv/{bc} \nFull VOD: {getVodLink(clipID)} \n{getDescriptionTemplate()} #{bc}"
 
 
 def uploadVideo(vidData):       YoutubeAPI.uploadVideo(processVideo(vidData), vidData['title'], vidData['description'], vidData['tags'])
@@ -47,6 +47,7 @@ def getUploadDate(hourOffset):  return datetime.datetime.now() + datetime.timede
 def getJsonContents(file):      return json.load(open(file, encoding="utf8"))
 def getClipData(clipID):        return getJsonContents(f"./clipData/{clipID}.json")
 
+def getVodLink(clipID):         return f"https://twitch.tv/videos/{getClipData(clipID)['video_id']}" 
 def getClipLink(clipID):        return getClipData(clipID)['url']
 def getTitle(clipID):           return getClipData(clipID)['title']
 def getBroadcaster(clipID):     return getClipData(clipID)['broadcaster_name']
