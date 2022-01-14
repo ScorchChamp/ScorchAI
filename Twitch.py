@@ -17,7 +17,7 @@ def getBlacklistedCreators(channel):                        return getCategories
 def clipIsInRightLanguage(clip, language = 'en'):           return 'en' in clip['language']
 def clipHasEnoughViews(clip, min_views):                    return clip['view_count'] > min_views
 def clipBroadcasterIsBlacklisted(clip, channel):            return clip['broadcaster_id'] in getBlacklistedCreators(channel)
-def clipAlreadyUploaded(clip, channel):                     return os.path.isfile(f"./assets/Channels/{channel}/clipData/{clip['id']}.json")
+def clipAlreadyUploaded(clip, channel):                     return os.path.isfile(f"./assets/Channels/{channel}/ClipData/{clip['id']}.json")
 def daysTooHigh(days):                                      return days > 7
 
 def isClipViable(clip, category, channel):
