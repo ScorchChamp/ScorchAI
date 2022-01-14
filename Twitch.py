@@ -16,8 +16,9 @@ def getBlacklistedCreators(channel):                        return getCategories
 
 def clipIsInRightLanguage(clip, language = 'en'):           return 'en' in clip['language']
 def clipHasEnoughViews(clip, min_views):                    return clip['view_count'] > min_views
+def getClipDataFile(clip, channel):                         return f"./assets/Channels/{channel}/ClipData/{clip['id']}.json"
 def clipBroadcasterIsBlacklisted(clip, channel):            return clip['broadcaster_id'] in getBlacklistedCreators(channel)
-def clipAlreadyUploaded(clip, channel):                     return os.path.isfile(f"./assets/Channels/{channel}/ClipData/{clip['id']}.json")
+def clipAlreadyUploaded(clip, channel):                     return os.path.isfile(getClipDataFile(clip, channel))
 def daysTooHigh(days):                                      return days > 7
 
 def isClipViable(clip, category, channel):
@@ -75,8 +76,7 @@ def getNextcategory(priority, channel):
     return False
 
 def dumpClipData(clip, channel):
-    file = f"./assets/Channels/{channel}/clipData/{clip['id']}.json"
-    with open(file, 'w') as fp:
+    with open(getClipDataFile(clip, channel), 'w') as fp:
         json.dump(clip, fp)
 
 def emptyFolder(dir):
