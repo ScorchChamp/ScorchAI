@@ -13,7 +13,7 @@ import http
 from googleapiclient.http import MediaFileUpload
 
 
-def Create_Service(client_secret_file, api_name, api_version, *scopes):
+def Create_Service(channel, client_secret_file, api_name, api_version, *scopes):
     print(client_secret_file, api_name, api_version, scopes, sep='-')
     CLIENT_SECRET_FILE = client_secret_file
     API_SERVICE_NAME = api_name
@@ -23,7 +23,7 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
 
     cred = None
 
-    pickle_file = f'./auth/token_{API_SERVICE_NAME}_{API_VERSION}.pickle'
+    pickle_file = f'./assets/Channels/{channel}/token_{API_SERVICE_NAME}_{API_VERSION}.pickle'
     print(pickle_file)
 
     if os.path.exists(pickle_file):
@@ -49,9 +49,9 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
         print(e)
         return None
 
-def Upload_Video(request_body, file):
+def Upload_Video(request_body, file, channel):
         print(f"Uploading {file}")
-        service = Create_Service("./auth/client_secrets.json", 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
+        service = Create_Service(channel, "./auth/client_secrets.json", 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
         mediaFile = MediaFileUpload(file, chunksize=-1, resumable=True)
         response_upload = service.videos().insert(
             part='snippet,status',

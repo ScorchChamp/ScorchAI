@@ -6,10 +6,10 @@ PREP_STAGE = './videos/prepstage/'
 READY_STAGE = './videos/ready_to_upload/'
 UPLOADED_STAGE = './videos/uploaded_clips/'
 
-def uploadVideo(file, title, description, tags):
+def uploadVideo(file, title, description, tags, channel):
     new_dir = UPLOADED_STAGE + file.split("/")[-1] + ".mp4"
     shutil.move(file, new_dir)
-    API.Google.Upload_Video(getRequestBody(title, description, tags), new_dir)    
+    API.Google.Upload_Video(getRequestBody(title, description, tags), new_dir, channel)    
             
 def upload_thumbnails(thumbnail = False):
     if not thumbnail:
