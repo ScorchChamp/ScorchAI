@@ -45,7 +45,6 @@ def getTagsTemplate(channel):          return open(f"./assets/Channels/{channel}
 def getDescriptionTemplate(channel):   return open(f"./assets/Channels/{channel}/description.txt", encoding="utf8").read()
 def getUploadDate(hourOffset):  return datetime.datetime.now() + datetime.timedelta(hours=hourOffset)
 def getJsonContents(file):      return json.load(open(file, encoding="utf8"))
-<<<<<<< HEAD
 def getClipData(clipID, channel):    return getJsonContents(f"./assets/Channels/{channel}/clipData/{clipID}.json")
 
 def getVodLink(clipID, channel):         return f"https://twitch.tv/videos/{getClipData(clipID, channel)['video_id']}" 
@@ -55,17 +54,6 @@ def getBroadcaster(clipID, channel):     return getClipData(clipID, channel)['br
 def generateTags(clipID, channel):       return f"{getTagsTemplate(channel)}, {getTags(clipID, channel)}"
 def getTags(clipID, channel):            return f"{getBroadcaster(clipID, channel)}, {getTitle(clipID, channel)}, {clipID}, "
 def generateTitle(clipID, channel):      return f"{getTitle(clipID, channel)} - {getBroadcaster(clipID, channel)}"
-=======
-def getClipData(clipID):        return getJsonContents(f"./clipData/{clipID}.json")
-
-def getVodLink(clipID):         return f"https://twitch.tv/videos/{getClipData(clipID)['video_id']}"
-def getClipLink(clipID):        return getClipData(clipID)['url']
-def getTitle(clipID):           return getClipData(clipID)['title']
-def getBroadcaster(clipID):     return getClipData(clipID)['broadcaster_name']
-def generateTags(clipID):       return f"{getTagsTemplate()}, {getTags(clipID)}"
-def getTags(clipID):            return f"{getBroadcaster(clipID)}, {getTitle(clipID)}, {clipID}, "
-def generateTitle(clipID):      return f"{getTitle(clipID)} - {getBroadcaster(clipID)}"
->>>>>>> Development
 
 
 def getVideoName(video):    return video.split(".mp4")[0]
