@@ -11,10 +11,10 @@
 <br />
 <p align="center">
   <a href="https://github.com/ScorchChamp/ScorchAI">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/readme_data/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">ScorchAI Twitch Bot</h3>
+  <h3 align="center">ScorchAI</h3>
 
   <p align="center">
     Twitch Clip Bot
@@ -51,12 +51,22 @@
   </ol>
 </details>
 
-## <b>DISCLAIMER: THIS PROJECT IS NOT YET FREE TO USE </b>
+## <b>DISCLAIMER: THIS PROJECT IS NOT FREE TO USE, CONTACT ME FOR DETAILS </b>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This bot was made after a lack of archiving of Twitch clips on youtube. I came with the idea to make a bot that automatically uploads the 24 most viewed clips per day per category. 
+I am an IT student that took a year off to relieve some stress during covid. Now, I still wanted to program/code some fun stuff. During this year, many clip channels started to boom. The flaw with these channel, though, is that they require someone to download clips and reupload the all manually. <br>
+<br>
+Now, I wanted to make a bot that does this process automatically, thus the idea for ScorchAI. (Scorch is my IGN for most games and AI sounds cool)
+<br>
+<i>ps. the code is ugly, but it works. If you dont like it, make a pull request</i>
+<br>
+<br>
+<i>Proof of concept (121.000 views per hour on main clip channel):</i><br>
+<img src="assets/readme_data/121k.png" alt="121.000 views per hour" height="150">
+<img src="assets/readme_data/fullData.png" alt="1.400.000 views per day" height="150">
+
 
 ## Releases
 Download the latest version of [ScorchAI](https://github.com/ScorchChamp/ScorchAI/releases/) and extract the ScorchAI-x.zip / ScorchAI-x.tar.gz. Make sure to read <a href="#getting-started">Getting Started</a>.
@@ -67,24 +77,14 @@ Download the latest version of [ScorchAI](https://github.com/ScorchChamp/ScorchA
 ## Getting Started
 
 To get a local copy up and running follow these simple steps.
+#### WARNING: YOUR APPLICATION HAS TO GO THROUGH AUDIT BY YOUTUBE TO USE IT WITHOUT IT BEING BLOCKED</b>
 
 ### Prerequisites
 
 You need to create an application over at [The Youtube Developer Console](https://console.cloud.google.com/apis/dashboard) with the Data APIv3. When you first run your application, you should get a link where you can accept your request.
-#### WARNING: YOUR APPLICATION HAS TO BE AUDIT BY YOUTUBE TO USE IT WITHOUT IT BEING BLOCKED</b>
 
 In the assets folder you should add the following files:
-1. auth.json
-    ```json
-   {
-        "twitch": {
-            "client-id": "YOUR CLIENT ID",
-            "client-secret": "YOUR CLIENT SECRET",
-            "OAUTH": "Bearer YOUR OAUTH TOKEN"
-        }
-    }
-   ```
-2. client_secrets.json
+1. client_secrets.json
     ```json
    {
         "web": {
@@ -96,16 +96,28 @@ In the assets folder you should add the following files:
         }
     }
    ```
+2. auth.json
+   ```json
+    {
+      "twitch": {
+        "client-id": "CLIENT ID", 
+        "client-secret": "CLIENT SECRET", 
+        "redirect-uri": "REDIRECT URI", // Probably https://localhost
+        "OAUTH": "OAUTH TOKEN", // This could be empty, then you should run initial_oauth.py once
+        "refresh-token": "REFRESH TOKEN" // Used to reset the oauth token if it runs out (happens like 10x a day)
+      }
+    }
+   ```
 
 ### Installation
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/ScorchChamp/ScorchAI_name.git
+    git clone https://github.com/ScorchChamp/ScorchAI_name.git
    ```
 1. Install Libraries
    ```sh
-   pip install -r requirements.txt
+    pip install -r requirements.txt
    ```
 
 
@@ -114,47 +126,45 @@ In the assets folder you should add the following files:
 
 This application can be used on multiple channels. But be aware that have a limited amount of quota with the youtube datav3 api.
 
-In TwitchDownload.py specify which games/channels you want to upload to your channel:
-   ```python
-   dc.generateClipsFromData("https://api.twitch.tv/helix/clips", {
-       "game_id": "509658",   # JUST CHATTING
-       "first": "8", 
-       "started_at": yesterday_date_formatted
-    })
+In assets/categories.json specify which games/channels you want to upload to your channel:
+   ```json
+    {
+      "games": {
+
+      },
+      "broadcasters": {
+          "SCORCHCHAMP": {
+              "priority": 1,
+              "min_views": 0,
+              "real_name": "ScorchChamp",
+              "parameters": {
+                  "first": "100",
+                  "broadcaster_id": "58251106"
+              }
+          }
+      },
+      "blacklisted_broadcasters": []
+    }
    ```
+
 
 Assets/description.txt specifies the default video description. Change this to your liking:
 
 ```
-#ScorchAI #Shorts
 👀 Check that you are subscribed!
-⚠ EXPAND ME ⚠
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
 ✅ Socials:
 
 👑 Discord: https://discord.gg/5Z82Tjt 
-👑 Main Channel: https://www.youtube.com/channel/UCdWXErDsp1GJASnmLm5cUCA
 👑 Twitch: https://twitch.tv/scorchchamp
+👑 Main Channel: https://www.youtube.com/c/ScorchChamp
 
 ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
 
-🌼 INFO ABOUT THIS CHANNEL 🌼
-
-➾ This video was uploaded via ScorchAI. This Application has been approved by YouTube Audit.
-➾ This AI is currently in its test-fase; Huge changes will be made to the AI.
-
-⚡ Do you want specific games/creators added as clips? Create a ticket over at the #create-ticket on my discord!
-
-⚐ If the title is wrong or the content is offensive/not interesting/bad/etc please, again, contact me over at discord.
-
-👑 CONTRIBUTE: https://github.com/ScorchChamp/ScorchAI
-
-▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬
-
-📷 VIDEO INFO 
-✍ contact me on Discord under #create-ticket with this videoID for questions or notices:
+****If you are this broadcaster, and want this video removed, please let me know in either the comments, my business e-mail or in my discord.****
+#ScorchAI #Shorts
 ```
 
 
@@ -177,21 +187,12 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
-
-<!-- LICENSE -->
-## License
-
-This application is <b>NOT YET</b> free to use. Contact me about fair use, if you want to use it.
-
-
-
 <!-- CONTACT -->
 ## Contact
 
 ScorchChamp - scorchchamp@gmail.com
 
-Project Link: [https://github.com/ScorchChamp/ScorchAI_name](https://github.com/ScorchChamp/ScorchAI)
+Project Link: [https://github.com/ScorchChamp/ScorchAI](https://github.com/ScorchChamp/ScorchAI)
 
 
 [contributors-shield]: https://img.shields.io/github/contributors/ScorchChamp/ScorchAI.svg?style=for-the-badge

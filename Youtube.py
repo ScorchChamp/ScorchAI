@@ -1,95 +1,62 @@
-from YoutubeAPI import YoutubeAPI
+import API.YoutubeAPI as YoutubeAPI
 import os
 import datetime
 import json
-from Twitch import Twitch
+import Twitch
 import shutil
 
-class Youtube:
-    def __init__(self): 
-        self.API = YoutubeAPI("./auth/client_secrets.json")
-        self.twitch = Twitch()
+CLIPS_FOLDER = './videos/clips/'
+PREP_STAGE = './videos/prepstage/'
+READY_STAGE = './videos/ready_to_upload/'
+UPLOADED_STAGE = './videos/uploaded_clips/'
 
-    def uploadClip(self, generateWhenNoneFound):
-        while len(self.getVideos('./videos/clips/')) == 0:
-            if generateWhenNoneFound:
-                print('Getting clips')
-                self.twitch.generateClips(1)
-            else:
-                print("No clips found... Use -g tag to generate anyway")
-                return False
-                
-        videos = self.getVideos('./videos/clips/')
+def uploadClip(generateWhenNoneFound, channel):
+    if getVideoReadyAmount() == 0 and generateWhenNoneFound:
+        Twitch.generateClips(1, channel)
 
-        vidData = self.generateVidData(videos[0])
-        self.uploadVideo(
-            vidData['videourl'], 
-            vidData['title'], 
-            vidData['description'], 
-            vidData['tags']
-        )
-        
-    def generateVidData(self, vidData):
-        vidData = {
-            'videourl': f'./videos/clips/{vidData}.mp4',
-            'title': self.generateTitle(vidData),
-            'description': self.generateDescription(vidData, f"#{self.getBroadcaster(vidData)}"),
-            'tags': self.generateTags(vidData)
-        }
-        return vidData
-
-    def uploadVideo(self, video, title, description, tags):
-        video = self.processVideo(video)
-        print(f"Uploading {title}")
-        self.API.uploadVideo(video, title, description, tags)
-
-    def processVideo(self, video):
-        videoID = video.split("/")[-1]
-        newDir = f"./videos/uploaded_clips/{videoID}"
-        shutil.move(video, newDir)
-        return newDir
-
-    def getVideos(self, folder):
-        videos = os.listdir(folder)
-        for i in range(len(videos)):
-            videos[i] = videos[i].split(".mp4")[0]
-        return videos
-            
-    def generateTags(self, clipID, tags = ""):
-        with open('./assets/tags.txt', encoding="utf8") as file:
-            tags += file.read()
-        tags += ", " + self.getTags(clipID)
-        return tags
-
-    def generateDescription(self, clipID, description = ""):
-        bc = self.getBroadcaster(clipID)
-        description = f"Follow {bc} on https://twitch.tv/{bc} \n \n"
-        with open("./assets/description.txt", encoding="utf8") as file:
-            description += file.read()
-        description += f'#{bc} '
-        return description
-
-    def generateTitle(self, clipID):
-        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
-            data = json.load(file)
-            return f"{data['title']} ({data['broadcaster_name']})"
-         
-
-    def getUploadDate(self, hourOffset):
-        return datetime.datetime.now() + datetime.timedelta(hours=hourOffset)
-
-    def getTitle(self, clipID):
-        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
-            return json.load(file)['title']
-
-    def getTags(self, clipID):
-        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
-            data = json.load(file)
-            return data['broadcaster_name'] + ", " + data['title'] + ", " + data['id'] + ", "
-
-    def getBroadcaster(self, clipID):
-        with open(f"./clipData/{clipID}.json", encoding="utf8") as file:
-            data = json.load(file)
-            return data['broadcaster_name']
+    uploadVideo(generateVidData(getNextReadyVideoID(), channel), channel)
+    
+def generateVidData(clipID, channel):
+    vidData = {
+        'videourl': f'{READY_STAGE+clipID}.mp4',
+        'title': generateTitle(clipID, channel),
+        'description': generateDescription(clipID, channel),
+        'tags': generateTags(clipID, channel),
+        'id': clipID
+    }
+    return vidData
 
 
+def processVideo(videoData):
+    newDir = f"{READY_STAGE+videoData['id']}"
+    shutil.move(videoData['videourl'], newDir)
+    return newDir
+
+def generateDescription(clipID, channel):
+    bc = getBroadcaster(clipID, channel)
+    return f"Follow {bc} on https://twitch.tv/{bc} \nFull VOD: {getVodLink(clipID, channel)} \n{getDescriptionTemplate(channel)} #{bc}"
+
+
+def uploadVideo(vidData, channel):       YoutubeAPI.uploadVideo(processVideo(vidData), vidData['title'], vidData['description'], vidData['tags'], channel)
+def getVideos(folder):          return [video.split(".mp4")[0] for video in os.listdir(folder)] 
+
+def getVideoID(video):          return video.split("/")[-1]
+def getTagsTemplate(channel):          return open(f"./assets/Channels/{channel}/tags.txt", encoding="utf8").read()
+def getDescriptionTemplate(channel):   return open(f"./assets/Channels/{channel}/description.txt", encoding="utf8").read()
+def getUploadDate(hourOffset):  return datetime.datetime.now() + datetime.timedelta(hours=hourOffset)
+def getJsonContents(file):      return json.load(open(file, encoding="utf8"))
+def getClipData(clipID, channel):    return getJsonContents(f"./assets/Channels/{channel}/clipData/{clipID}.json")
+
+def getVodLink(clipID, channel):         return f"https://twitch.tv/videos/{getClipData(clipID, channel)['video_id']}" 
+def getClipLink(clipID, channel):        return getClipData(clipID, channel)['url']
+def getTitle(clipID, channel):           return getClipData(clipID, channel)['title']
+def getBroadcaster(clipID, channel):     return getClipData(clipID, channel)['broadcaster_name']
+def generateTags(clipID, channel):       return f"{getTagsTemplate(channel)}, {getTags(clipID, channel)}"
+def getTags(clipID, channel):            return f"{getBroadcaster(clipID, channel)}, {getTitle(clipID, channel)}, {clipID}, "
+def generateTitle(clipID, channel):      return f"{getTitle(clipID, channel)} - {getBroadcaster(clipID, channel)}"
+
+
+def getVideoName(video):    return video.split(".mp4")[0]
+def getNextVideoID():       return getVideos(CLIPS_FOLDER)[0]
+def getNextReadyVideoID():  return getVideos(READY_STAGE)[0]
+def getVideoReadyAmount():  return len(getVideos(READY_STAGE))
