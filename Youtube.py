@@ -45,7 +45,7 @@ def getTagsTemplate(channel):          return open(f"./assets/Channels/{channel}
 def getDescriptionTemplate(channel):   return open(f"./assets/Channels/{channel}/description.txt", encoding="utf8").read()
 def getUploadDate(hourOffset):  return datetime.datetime.now() + datetime.timedelta(hours=hourOffset)
 def getJsonContents(file):      return json.load(open(file, encoding="utf8"))
-def getClipData(clipID, channel):    return getJsonContents(f"./assets/Channels/{channel}/clipData/{clipID}.json")
+def getClipData(clipID, channel):    return getJsonContents(f"./assets/Channels/{channel}/ClipData/{clipID}.json")
 
 def getVodLink(clipID, channel):         return f"https://twitch.tv/videos/{getClipData(clipID, channel)['video_id']}" 
 def getClipLink(clipID, channel):        return getClipData(clipID, channel)['url']
