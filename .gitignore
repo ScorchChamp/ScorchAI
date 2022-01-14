@@ -12,7 +12,8 @@ auth/*
 # C extensions
 *.so
 *.mp4
-assets/*.txt
+*.txt
+!requirements.txt
 
 # Distribution / packaging
 .Python
