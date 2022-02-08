@@ -22,6 +22,7 @@ def getChannelID(name):
                 print(f"SOMETHING WENT WRONG: {res}")
         else:
             if len(res['data']):
+                print(res['data'][0])
                 return res['data'][0]["id"]
             else:
                 return "-1"
