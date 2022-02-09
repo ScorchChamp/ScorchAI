@@ -36,6 +36,8 @@ def downloadClip(clip):
         return False
 
 def getClipsList(parameters):
+    max_retries = 5
+    current_tries = 0
     while True: 
         res = requests.get("https://api.twitch.tv/helix/clips", parameters, headers=Authorizer.getHeaders()).json()
         if "error" in res:
@@ -44,7 +46,10 @@ def getClipsList(parameters):
             if res["status"] == 401:
                Authorizer.refreshOAUTH()
             else:
+                current_tries += 1
                 print(f"SOMETHING WENT WRONG: {res}")
+                if current_tries > max_retries:
+                    exit()
         else:
             return res['data']
 

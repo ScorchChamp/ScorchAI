@@ -1,0 +1,2 @@
+INSERT INTO Games VALUES 
+    (?, ?, ?)

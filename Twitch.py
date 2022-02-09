@@ -1,90 +1,70 @@
-import json
-from datetime import datetime
-import datetime
+from numpy import clip
+import DatabaseConnector as db
 import os
-import API.TwitchAPI as TwitchAPI
+from TwitchAPI import TwitchAPI
 
-CATEGORIES_FILE = "categories.json"
-UPLOADED_CLIPS_FOLDER = './videos/uploaded_clips/'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def getCategoriesFile(channel):                             return getJsonContents(f"./assets/Channels/{channel}/{CATEGORIES_FILE}")
+class Twitch:
+    database_file = os.path.join(BASE_DIR, "database.db")
+    twitch_api = None
 
-def getJsonContents(file):                                  return json.load(open(file, encoding="utf8"))
-def getGames(channel):                                      return getCategoriesFile(channel)['games']
-def getBroadcasters(channel):                               return getCategoriesFile(channel)['broadcasters']
-def getBlacklistedCreators(channel):                        return getCategoriesFile(channel)['blacklisted_broadcasters']
+    def __init__(self):
+        self.db = db.DatabaseConnector(self.database_file)
+        self.twitch_api = TwitchAPI()
 
-def clipIsInRightLanguage(clip, language = 'en'):           return 'en' in clip['language']
-def clipHasEnoughViews(clip, min_views):                    return clip['view_count'] > min_views
-def getClipDataFile(clip, channel):                         return f"./assets/Channels/{channel}/ClipData/{clip['id']}.json"
-def clipBroadcasterIsBlacklisted(clip, channel):            return clip['broadcaster_id'] in getBlacklistedCreators(channel)
-def clipAlreadyUploaded(clip, channel):                     return os.path.isfile(getClipDataFile(clip, channel))
-def daysTooHigh(days):                                      return days > 7
-
-def isClipViable(clip, category, channel):
-    if     clipAlreadyUploaded(clip, channel):              return False
-    if not clipHasEnoughViews(clip, category['min_views']): return False
-    if not clipIsInRightLanguage(clip, channel):            return False
-    if     clipBroadcasterIsBlacklisted(clip, channel):     return False
-    return True
+    def refreshAllCategories(self):
+        for category in self.db.selectCategories():
+            self.refreshClipData(game_id = category[3], broadcaster_id = category[4])
 
 
-def generateClips(amount, channel):
-    emptyFolder(UPLOADED_CLIPS_FOLDER)
-    [generateClip(channel) for i in range(amount)]
+    def refreshClipData(self, *, broadcaster_id: int = None, game_id: str = None):
+        if game_id is not None: self.refreshGameClips(game_id)
+        if broadcaster_id is not None: self.refreshBroadcasterClips(broadcaster_id)
 
-def generateClip(channel):
-    current_priority = 1
-    current_day = 1
-    gotten_clip = False
-    while not gotten_clip:
-        current_category = getNextcategory(current_priority, channel)
-        print(f"prio: {current_priority}, day: {current_day}")
-        if not current_category:
-            current_priority = 1
-            current_day += 1
-            if daysTooHigh(current_day): 
-                print("Days too high without a clip! Quitting :( ...")
-                exit()
-        else:
-            clip = getNextViableClip(current_category, channel, current_day)
-            if clip:
-                dumpClipData(clip, channel)
-                TwitchAPI.downloadClip(clip)
-                gotten_clip = True
-            current_priority += 1
+    def refreshGameClips(self, game_id: str):
+        data = self.twitch_api.getClipsList({"game_id": game_id})
+        if data:
+            for clip in data:
+                self.saveClipData(clip)
 
-    
-def getNextViableClip(category, channel, days = 1):
-    parameters = category['parameters']
-    parameters["started_at"] = getTimeWithDelay(days)
-    if not "first" in parameters: parameters['first'] = 10
-    clip_list = TwitchAPI.getClipsList(parameters)
+    def refreshBroadcasterClips(self, broadcaster_id: int):
+        data = self.twitch_api.getClipsList({"broadcaster_id": broadcaster_id})
+        for clip in data: self.saveClipData(clip)
 
-    for clip in clip_list:
-        if isClipViable(clip, category, channel): return clip
-    return False
+    def saveUserData(self, user_id: int):
+        if len(self.db.selectUsers(userID=user_id)) == 0:
+            user_data = self.twitch_api.getUserData(user_id=user_id)
+            for user in user_data:
+                if 'email' in user: email = user['email']
+                else: email = ''
+                self.db.insertNewUser(user['id'], user['login'], user['display_name'], user['type'], user['broadcaster_type'], user['description'], user['profile_image_url'], user['offline_image_url'], user['view_count'], email, user['created_at'])
 
-def getNextcategory(priority, channel):
-    for category in getBroadcasters(channel):
-        category = getBroadcasters(channel)[category]
-        if category['priority'] == priority: return category
-    for category in getGames(channel):
-        category = getGames(channel)[category]
-        if category['priority'] == priority: return category
+    def saveGameData(self, game_id: int):
+        if len(self.db.selectGames(gameID=game_id)) == 0:
+            game_data = self.twitch_api.getGameData(game_id=game_id)
+            for game in game_data:
+                self.db.insertNewGame(game['id'], game['name'], game['box_art_url'])
 
-    return False
-
-def dumpClipData(clip, channel):
-    with open(getClipDataFile(clip, channel), 'w') as fp:
-        json.dump(clip, fp)
-
-def emptyFolder(dir):
-    for f in os.listdir(dir):
-        os.remove(os.path.join(dir, f))
-
-def getTimeWithDelay(days = 1):
-    YESTERDAY_DATE_ISO = datetime.datetime.now() - datetime.timedelta(days=days)
-    YESTERDAY_DATE_FORMATTED = YESTERDAY_DATE_ISO.strftime("%Y-%m-%dT%H:%M:%SZ")
-    return YESTERDAY_DATE_FORMATTED
-
+    def saveClipData(self, data: dict):
+        if len(self.db.selectClips(clipID=data['id'])) == 0:
+            self.saveUserData(data['broadcaster_id'])
+            self.saveUserData(data['creator_id'])
+            self.saveGameData(data['game_id'])
+            self.db.insertNewBroadcaster(data['broadcaster_id'], data['broadcaster_name'])
+            self.db.insertNewClip(
+                data['id'],
+                data['title'],
+                data['broadcaster_id'],
+                data['url'],
+                data['embed_url'],
+                data['creator_id'],
+                data['video_id'],
+                data['game_id'],
+                data['language'],
+                data['view_count'],
+                data['created_at'],
+                data['thumbnail_url'],
+                data['duration'],
+                data['thumbnail_url'].split("-preview")[0] + ".mp4"
+            )
