@@ -6,4 +6,4 @@ WHERE Clip_ID NOT IN (
     WHERE Channel_ID LIKE ?
 )
 AND Channel_ID LIKE ?
-ORDER BY viewcount DESC
+ORDER BY Created_at DESC

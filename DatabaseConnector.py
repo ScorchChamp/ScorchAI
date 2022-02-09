@@ -84,3 +84,6 @@ class DatabaseConnector:
 
     def selectNotUploadedClip(self, *, channelID: str = "%") -> list:
         return self.executeQuery(self.getQuery("selectNotUploadedClip"), (channelID, channelID))
+
+    def getClipDownloadURL(self, ClipID: str):
+        return self.executeQuery("SELECT Download_URL FROM clips WHERE Clip_ID LIKE ?", (ClipID,))[0][0]

@@ -106,8 +106,8 @@ CREATE TABLE Clips (
 --     (1, 'ScorchChamp'),
 --     (2, 'Pokimane');
 
--- INSERT INTO Channels VALUES 
---     ('UC37Fy80jwUvBQVDya-xcNZQ', 'Bedrock' , 'Test Description!');
+INSERT INTO Channels VALUES 
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'Bedrock' , 'Test Description!');
 --     ('64efdg43ffse', 'Pokimane fan channel' , 'Make sure you are subscribed'),
 --     ('3rfsdf45y5gd', 'DreamSMP clips' , 'I upload DreamSMP every second lmao');
 

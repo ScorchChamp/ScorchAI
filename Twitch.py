@@ -2,6 +2,7 @@ from numpy import clip
 import DatabaseConnector as db
 import os
 from TwitchAPI import TwitchAPI
+import urllib
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,6 +13,12 @@ class Twitch:
     def __init__(self):
         self.db = db.DatabaseConnector(self.database_file)
         self.twitch_api = TwitchAPI()
+
+    def getFirstValidClip(self, channelID = None):
+        return self.db.selectNotUploadedClip(channelID=channelID)[0]
+
+    def getTwitchClipDownloadURL(self, clipID: str = None):
+        return self.db.getClipDownloadURL(ClipID=clipID)
 
     def refreshAllCategories(self):
         for category in self.db.selectCategories():
@@ -45,6 +52,13 @@ class Twitch:
             game_data = self.twitch_api.getGameData(game_id=game_id)
             for game in game_data:
                 self.db.insertNewGame(game['id'], game['name'], game['box_art_url'])
+
+    def downloadClip(self, *, clipID: str = None, folder: str = "./clips/stand-by/"):
+        print(f"Downloading {clipID}")
+        clip_file = os.path.join(BASE_DIR, folder, clipID + ".mp4")
+        urllib.request.urlretrieve(self.db.getClipDownloadURL(clipID), filename=clip_file)
+        print("Download done!")
+
 
     def saveClipData(self, data: dict):
         if len(self.db.selectClips(clipID=data['id'])) == 0:

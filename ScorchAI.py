@@ -13,6 +13,18 @@ class ScorchAI:
         self.twitch = Twitch.Twitch()
         self.twitch.refreshAllCategories()
 
-    # print(db.selectNotUploadedClip(channelID='3rfsdf45y5gd'))
+
+    def uploadClip(self, channelID: str, *, amount: int = 1, clipID: str = None):
+        if clipID: 
+            id = self.twitch.db.selectClips(clipID=clipID)[0]
+            self.twitch.downloadClip(clipID=id)
+        else:
+            for i in range(0, amount):
+                id = self.twitch.getFirstValidClip(channelID)[0]
+                self.twitch.downloadClip(clipID=id)
+
+                
 
 scai = ScorchAI()
+
+scai.uploadClip(channelID='UC37Fy80jwUvBQVDya-xcNZQ')
