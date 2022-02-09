@@ -3,6 +3,7 @@ import DatabaseConnector as db
 import os
 from TwitchAPI import TwitchAPI
 import urllib
+from datetime import date
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -53,10 +54,11 @@ class Twitch:
             for game in game_data:
                 self.db.insertNewGame(game['id'], game['name'], game['box_art_url'])
 
-    def downloadClip(self, *, clipID: str = None, folder: str = "./clips/stand-by/"):
+    def downloadClip(self, channelID, *, clipID: str = None, folder: str = "./clips/stand-by/"):
         print(f"Downloading {clipID}")
         clip_file = os.path.join(BASE_DIR, folder, clipID + ".mp4")
         urllib.request.urlretrieve(self.db.getClipDownloadURL(clipID), filename=clip_file)
+        self.db.insertNewClipUploadedToChannel(clipID=clipID, channelID=channelID, upload_date=date.today())
         print("Download done!")
 
 
