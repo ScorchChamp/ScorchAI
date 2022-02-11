@@ -23,7 +23,9 @@ def Create_Service(channel, client_secret_file, api_name, api_version, *scopes):
 
     cred = None
 
-    pickle_file = f'./auth/{channel}/token_{API_SERVICE_NAME}_{API_VERSION}.pickle'
+    pickle_file = f'./auth/token_{channel}.pickle'
+    if not os.path.exists(f"./auth/"): os.mkdir(f"./auth/")
+        
     print(pickle_file)
 
     if os.path.exists(pickle_file):
@@ -36,6 +38,7 @@ def Create_Service(channel, client_secret_file, api_name, api_version, *scopes):
         else:
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
             cred = flow.run_local_server()
+
 
         with open(pickle_file, 'wb') as token:
             pickle.dump(cred, token)
@@ -79,6 +82,7 @@ def Upload_Video(request_body, file, channel):
                     if 'id' in response:
                         video_id = response['id']
                         print("Video id '%s' was successfully uploaded." % response['id'])
+                        return response['id']
                 else:
                     exit("The upload failed with an unexpected response: %s" % response)
             except HTTPError as e:

@@ -1,7 +1,7 @@
 import json
 import requests
 
-AUTH_DATA_FILE = "auth.json"
+AUTH_DATA_FILE = "./auth/auth.json"
     
 def generateData():
     AUTH_DATA  = readAuthFile()

@@ -1,6 +1,7 @@
 import os.path
 import DatabaseConnector as db
 import Twitch
+import YoutubeAPI
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -14,17 +15,19 @@ class ScorchAI:
         self.twitch.refreshAllCategories()
 
 
-    def uploadClip(self, channelID: str, *, amount: int = 1, clipID: str = None):
-        if clipID: 
-            id = self.twitch.db.selectClips(clipID=clipID)[0]
-            self.twitch.downloadClip(channelID=channelID, clipID=id)
-        else:
-            for i in range(0, amount):
-                id = self.twitch.getFirstValidClip(channelID)[0]
-                self.twitch.downloadClip(channelID=channelID, clipID=id)
+    def uploadClip(self, channelID: str, *, amount: int = 1):
+        for i in range(0, amount):
+            data = self.twitch.getFirstValidClip(channelID)
+            id = data[0]
+            title = data[1]
+            tags = self.twitch.db.selectTags(channelID=channelID)
+            description = self.twitch.db.selectChannels(channelID=channelID)[0][2]
+            tags.append([title, id, channelID])
+            clip_file = self.twitch.downloadClip(channelID=channelID, clipID=id)
+            YoutubeAPI.uploadVideo(file=clip_file, title=title, description=description, tags=tags, channel=channelID)
 
                 
 
 scai = ScorchAI()
 
-scai.uploadClip(channelID='UC37Fy80jwUvBQVDya-xcNZQ')
+scai.uploadClip(channelID='UC37Fy80jwUvBQVDya-xcNZQ', amount=1)

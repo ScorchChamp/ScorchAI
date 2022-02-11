@@ -94,47 +94,9 @@ CREATE TABLE Clips (
     FOREIGN KEY (Creator_id) REFERENCES users(UserID)
     FOREIGN KEY (Broadcaster_id) REFERENCES users(UserID)
 );
-
-
-
-
-
--- TEST DATA
-
--- INSERT INTO Users VALUES 
---     (0, 'Test Username'),
---     (1, 'ScorchChamp'),
---     (2, 'Pokimane');
-
 INSERT INTO Channels VALUES 
     ('UC37Fy80jwUvBQVDya-xcNZQ', 'Bedrock' , 'Test Description!');
---     ('64efdg43ffse', 'Pokimane fan channel' , 'Make sure you are subscribed'),
---     ('3rfsdf45y5gd', 'DreamSMP clips' , 'I upload DreamSMP every second lmao');
-
--- INSERT INTO Tags VALUES 
---     ('3rfsdf45y5gd', 'Bedrock'), 
---     ('3rfsdf45y5gd', 'ScorchAI'),
---     ('3rfsdf45y5gd', 'Minecraft'),
---     ('3rfsdf45y5gd', 'ScorchChamp'),
---     ('3rfsdf45y5gd', 'Scorch'),
---     ('3rfsdf45y5gd', 'Twitch'),
---     ('3rfsdf45y5gd', 'Twitch Clips ScorchAI'),
---     ('3rfsdf45y5gd', 'Clip'),
---     ('assdg2142354', 'Pokimane');
-
 INSERT INTO Games VALUES 
     (743, 'Chess', 'some-url');
---     (1, 'Minecraft'),
---     (2, 'TFT');
-
 INSERT INTO Categories VALUES 
-    ('UC37Fy80jwUvBQVDya-xcNZQ', 1, 10, 743, NULL);
---     ('3rfsdf45y5gd', 2, 10, NULL, 116228390),
---     ('3rfsdf45y5gd', 3, 10, NULL, 489155160),
---     ('3rfsdf45y5gd', 4, 10, NULL, 474849254);
-
--- INSERT INTO Clips VALUES 
---     ('23436456712365', 'Test clip!', 0, 'https://test.com/', 'https://test.com/embed', 0, 0, 0, 'en', 100, '08-02-2022', 'https://test.com/thumbnail',  15, 'https://clipurl.somewhere/');
-
--- INSERT INTO Clips_Uploaded_To_Channel VALUES
---     ('23436456712365', 'assdg2142354', '08-02-2022');
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 1, 10, NULL, 40934651);

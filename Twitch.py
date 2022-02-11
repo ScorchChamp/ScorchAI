@@ -1,4 +1,3 @@
-from numpy import clip
 import DatabaseConnector as db
 import os
 from TwitchAPI import TwitchAPI
@@ -60,6 +59,7 @@ class Twitch:
         urllib.request.urlretrieve(self.db.getClipDownloadURL(clipID), filename=clip_file)
         self.db.insertNewClipUploadedToChannel(clipID=clipID, channelID=channelID, upload_date=date.today())
         print("Download done!")
+        return clip_file
 
 
     def saveClipData(self, data: dict):

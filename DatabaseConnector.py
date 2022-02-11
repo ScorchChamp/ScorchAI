@@ -64,11 +64,12 @@ class DatabaseConnector:
     def selectBroadcasters(self, *, broadcasterID: int = '%', broadcaster_name: str = "%"):
         return self.executeQuery(self.getQuery("selectBroadcasters"), (broadcasterID, broadcaster_name))
 
-    def selectChannels(self, ID: int = '%', *, displayname: str = "%", description: str = "%") -> list:
-        return self.executeQuery(self.getQuery("selectChannels"), (ID, displayname, description))
+    def selectChannels(self, channelID: int = '%', *, displayname: str = "%", description: str = "%") -> list:
+        return self.executeQuery(self.getQuery("selectChannels"), (channelID, displayname, description))
 
     def selectTags(self, *, channelID: str = "%", tag: str = "%") -> list:
-        return self.executeQuery(self.getQuery("selectTags"), (channelID, tag))
+        tags = self.executeQuery(self.getQuery("selectTags"), (channelID, tag))
+        return [tag for tag in tags]
 
     def selectGames(self, *, gameID: str = "%", gameName: str = "%") -> list:
         return self.executeQuery(self.getQuery("selectGames"), (gameName,gameID))
