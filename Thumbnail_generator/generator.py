@@ -1,19 +1,12 @@
 import os
-from PIL import Image
-
+from PIL import Image, ImageFont, ImageDraw
+import json
 
 GENERATED_FOLDER = "./generated/"
 
-def getBestFrame(file):
-    name = file.split(".mp4")[0]
-    os.system(f"ffmpeg -y -i {file} -vf 'thumbnail' -frames:v 1 {GENERATED_FOLDER}{name}.png")
 
-def putOverlayOverImage(file, overlay_file):
-    background = Image.open(file)
-    foreground = Image.open(overlay_file)
+    
 
-    background.paste(foreground, (0, 0), foreground)
-    background.save(file)
 
 def putMinecraftSkinsOverImage(file, skins):
     background = Image.open(file)
@@ -25,10 +18,18 @@ def putMinecraftSkinsOverImage(file, skins):
 
 
 def generateThumbnail(file):
-    name = file.split(".mp4")[0]
-    getBestFrame(file)
-    putOverlayOverImage(f"{GENERATED_FOLDER}{name}.png", "./overlays/overlay.png")
-    putMinecraftSkinsOverImage(f"{GENERATED_FOLDER}{name}.png", ["./overlays/Tubbo.png"])
+    with open("data.json", "r") as f:
+        data = json.load(f)['channel1']
+        overlay = data['overlay']
+        name = file.split(".mp4")[0]
+        font = data['font']
+        font_size = data['font_size']
+        font_color = data['font_color']
+        getBestFrame(file)
+
+        putOverlayOverImage(f"{GENERATED_FOLDER}{name}.png", f"./overlays/{overlay}.png")
+        putTextOverImage(f"{GENERATED_FOLDER}{name}.png", "This is a test!", font, font_size, font_color)
+        # putMinecraftSkinsOverImage(f"{GENERATED_FOLDER}{name}.png", ["./overlays/Tubbo.png"])
 
 
 
@@ -36,4 +37,4 @@ def generateThumbnail(file):
 
 
 
-generateThumbnail("BadSuaveWrenRlyTho-cOvMsUZRdkXNQnYf.mp4")
+generateThumbnail("FuriousMistyMousePartyTime.mp4")
