@@ -1,13 +1,9 @@
 import json
 import requests
+import os
 
-OAUTH = ""
-CLIENT_ID = ""
-AUTH_DATA = ""
-CLIENT_SECRET = ""
-REFRESH_TOKEN  = ""
-REDIRECT_URI = ""
-AUTH_DATA_FILE = "./auth/auth.json"
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+AUTH_DATA_FILE = BASE_DIR + "/auth/auth.json"
     
 def generateData():
     AUTH_DATA  = readAuthFile()
@@ -32,7 +28,13 @@ def readAuthFile():
 def refreshOAUTH():
     print("GENERATING NEW OAUTH TOKEN")
     data = generateData()
-    res = requests.post(f"https://id.twitch.tv/oauth2/token?client_id={data['client_id']}&client_secret={data['client_secret']}&redirect_uri={data['redirect_uri']}&refresh_token={data['refresh_token']}&grant_type=refresh_token").json()
+    res = requests.post(f"https://id.twitch.tv/oauth2/token", params = {
+        'client_id': data['client_id'],
+        'client_secret': data['client_secret'],
+        'redirect_uri': data['redirect_uri'],
+        'refresh_token': data["refresh_token"],
+        'grant_type': 'refresh_token'
+    }).json()
     print(res)
     saveRefresh(res['token_type'].capitalize() + " " + res['access_token'], res['refresh_token'])
 
