@@ -1,4 +1,10 @@
+from distutils.util import execute
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+DATABASE_FILE = 'database.db'
+QUERY_FILE_BASE_DIR = BASE_DIR + "/queries/"
 
 
 def serializeCursor(cursor):
@@ -7,9 +13,25 @@ def serializeCursor(cursor):
     return results
 
 def selectQuery(query: str, *, params:list = []):
-    with sqlite3.connect('database.db') as connection:
+    cursor = executeQuery(query, params=params)
+    return serializeCursor(cursor)
+
+def executeQuery(query: str, *, params:list = []):
+    with sqlite3.connect(DATABASE_FILE) as connection:
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
         cursor.execute(query, params)
-    return serializeCursor(cursor)
+    return cursor
 
+
+def runFileQuery(file: str, *, params: list = []):
+    with open(QUERY_FILE_BASE_DIR + file, 'r') as f:
+        queries = f.read()
+        for query in queries.split(";"):
+            try:
+                executeQuery(query, params=params)
+            except Exception as e:
+                pass
+
+if not os.path.isfile(DATABASE_FILE):
+    runFileQuery("Setup.sql")
