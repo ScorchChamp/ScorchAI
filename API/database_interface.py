@@ -3,7 +3,7 @@ import sqlite3
 import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-DATABASE_FILE = 'database.db'
+DATABASE_FILE = BASE_DIR + '/database.db'
 QUERY_FILE_BASE_DIR = BASE_DIR + "/queries/"
 
 
@@ -18,6 +18,7 @@ def selectQuery(query: str, *, params:list = []):
 
 def executeQuery(query: str, *, params:list = []):
     with sqlite3.connect(DATABASE_FILE) as connection:
+        connection.execute("PRAGMA foreign_keys = 1;")
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
         cursor.execute(query, params)
@@ -31,6 +32,7 @@ def runFileQuery(file: str, *, params: list = []):
             try:
                 executeQuery(query, params=params)
             except Exception as e:
+                print(e)
                 pass
 
 if not os.path.isfile(DATABASE_FILE):
