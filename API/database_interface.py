@@ -11,6 +11,5 @@ def selectQuery(query: str, *, params:list = []):
         connection.row_factory = sqlite3.Row
         cursor = connection.cursor()
         cursor.execute(query, params)
-    data = serializeCursor(cursor)
-    return data
+    return serializeCursor(cursor)
 

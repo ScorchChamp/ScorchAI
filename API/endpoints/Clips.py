@@ -3,4 +3,11 @@ from flask_restful import Resource, Api, reqparse
 
 class Clips(Resource):
     def get(self):
-        return {"data": db.selectQuery("SELECT * FROM Clips")}
+        return {"data": db.selectQuery("SELECT * FROM Clips")} # TODO: Update with sql file
+
+
+class NextClipForChannel(Resource):
+    def get(self):
+        return {"data": db.selectQuery("SELECT * FROM Clips)"} # TODO: Update with sql file
+
+

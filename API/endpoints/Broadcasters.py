@@ -4,7 +4,7 @@ from flask import request
 
 class Broadcasters(Resource):
     def get(self):
-        return {"data": db.selectQuery("SELECT * FROM Broadcasters")}
+        return {"data": db.selectQuery("SELECT * FROM Broadcasters")} # TODO: Update with sql file
 
 class Broadcaster(Resource):
     def get(self):
