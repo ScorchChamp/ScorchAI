@@ -95,7 +95,19 @@ INSERT INTO Games VALUES
 INSERT INTO Users VALUES 
     (40934651, 'testuser', 'Test User', 'Tester', 'Partner', 'I am a test account!', NULL, NULL, 100, 'test@scorchchamp.com', '15-02-2022');
 INSERT INTO Categories VALUES 
-    ('UC37Fy80jwUvBQVDya-xcNZQ', 1, 10, NULL, 40934651),
-    ('UC37Fy80jwUvBQVDya-xcNZQ', 2, 10, 743, NULL),
-    ('abcdefg', 1, 10, 743, NULL),
-    ('abcdefg', 2, 10, NULL, 40934651);
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 1, 150, NULL, 40934651),
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 2, 175, 743, NULL),
+    ('abcdefg', 1, 120, 743, NULL),
+    ('abcdefg', 2, 125, NULL, 40934651);
+
+INSERT INTO Tags VALUES
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'Test'),
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'ScorchAI'),
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'UC37Fy80jwUvBQVDya-xcNZQ'),
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'Bedrock'),
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'Youtube'),
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'Minecraft'),
+    ('abcdefg', 'Test'),
+    ('abcdefg', 'ScorchAI'),
+    ('abcdefg', 'Minecraft'),
+    ('abcdefg', 'Bedrock');

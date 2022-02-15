@@ -32,7 +32,6 @@ def runFileQuery(file: str, *, params: list = []):
             try:
                 executeQuery(query, params=params)
             except Exception as e:
-                print(e)
                 pass
 
 if not os.path.isfile(DATABASE_FILE):

@@ -41,10 +41,8 @@ def getClipsList(parameters):
         if "error" in res:
             time.sleep(1)
             print(f"Error code: {res['status']}")
-            if res["status"] == 401:
-               Authorizer.refreshOAUTH()
-            else:
-                print(f"SOMETHING WENT WRONG: {res}")
+            if res["status"] == 401: Authorizer.refreshOAUTH()
+            else:print(f"SOMETHING WENT WRONG: {res}")
         else:
             return res['data']
 
