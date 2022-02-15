@@ -1,5 +1,7 @@
+
+
 CREATE TABLE users (
-    UserID int,
+    User_ID int,
     login varchar(100),
     display_name varchar(100),
     type varchar(100),
@@ -11,16 +13,7 @@ CREATE TABLE users (
     email varchar(100),
     created_at datetime,
 
-
-    PRIMARY KEY (UserID)
-);
-
-CREATE TABLE Broadcasters (
-    Broadcaster_ID varchar(100),
-    Broadcaster_Displayname varchar(100),
-
-    PRIMARY KEY (Broadcaster_ID)
-    FOREIGN KEY (Broadcaster_ID) REFERENCES users(Broadcaster_ID)
+    PRIMARY KEY (User_ID)
 );
 
 CREATE TABLE Channels (
@@ -35,16 +28,16 @@ CREATE TABLE Tags (
     Channel_ID varchar(100),
     Tag varchar(20),
 
-    PRIMARY KEY (Channel_ID, Tag)
+    PRIMARY KEY (Channel_ID, Tag),
     FOREIGN KEY (Channel_ID) REFERENCES Channels(Channel_ID)
 );
 
 CREATE TABLE Games (
-    id varchar(50),
+    Game_ID varchar(50),
     name varchar(50),
     box_art_url varchar(100),
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (Game_ID)
 );
 
 CREATE TABLE Categories (
@@ -54,9 +47,9 @@ CREATE TABLE Categories (
     game_id varchar(50),
     Broadcaster_id int,
 
-    PRIMARY KEY (Channel_ID, Priority)
-    FOREIGN KEY (game_id) REFERENCES Games(id)
-    FOREIGN KEY (Broadcaster_id) REFERENCES users(UserID)
+    PRIMARY KEY (Channel_ID, Priority),
+    FOREIGN KEY (game_id) REFERENCES Games(Game_ID),
+    FOREIGN KEY (Broadcaster_id) REFERENCES users(User_ID),
     CHECK (
         (game_id IS NOT NULL OR Broadcaster_id IS NOT NULL)
         AND NOT (game_id IS NOT NULL AND Broadcaster_id IS NOT NULL)
@@ -68,8 +61,8 @@ CREATE TABLE Clips_Uploaded_To_Channel (
     Channel_ID varchar(100),
     upload_date datetime,
 
-    PRIMARY KEY (Clip_ID, Channel_ID)
-    FOREIGN KEY (Clip_ID) REFERENCES Clips(Clip_ID)
+    PRIMARY KEY (Clip_ID, Channel_ID),
+    FOREIGN KEY (Clip_ID) REFERENCES Clips(Clip_ID),
     FOREIGN KEY (Channel_ID) REFERENCES Channels(Channel_ID)
 );
 
@@ -90,13 +83,19 @@ CREATE TABLE Clips (
     Download_URL varchar(200),
 
     PRIMARY KEY (Clip_ID)
-    FOREIGN KEY (Game_id) REFERENCES Games(id)
-    FOREIGN KEY (Creator_id) REFERENCES users(UserID)
-    FOREIGN KEY (Broadcaster_id) REFERENCES users(UserID)
+    FOREIGN KEY (Game_id) REFERENCES Games(Game_ID),
+    FOREIGN KEY (Creator_id) REFERENCES users(User_ID),
+    FOREIGN KEY (Broadcaster_id) REFERENCES users(User_ID)
 );
 INSERT INTO Channels VALUES 
-    ('UC37Fy80jwUvBQVDya-xcNZQ', 'Bedrock' , 'Test Description!');
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 'Bedrock' , 'Test Description!'),
+    ('abcdefg', 'tester' , 'Test 22222222222222!');
 INSERT INTO Games VALUES 
     (743, 'Chess', 'some-url');
+INSERT INTO Users VALUES 
+    (40934651, 'testuser', 'Test User', 'Tester', 'Partner', 'I am a test account!', NULL, NULL, 100, 'test@scorchchamp.com', '15-02-2022');
 INSERT INTO Categories VALUES 
-    ('UC37Fy80jwUvBQVDya-xcNZQ', 1, 10, NULL, 40934651);
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 1, 10, NULL, 40934651),
+    ('UC37Fy80jwUvBQVDya-xcNZQ', 2, 10, 743, NULL),
+    ('abcdefg', 1, 10, 743, NULL),
+    ('abcdefg', 2, 10, NULL, 40934651);

@@ -1,5 +1,5 @@
 import database_interface as db
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource
 
 class Categories(Resource):
     def get(self):

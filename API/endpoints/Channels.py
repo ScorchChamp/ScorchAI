@@ -7,8 +7,8 @@ class Channels(Resource):
         return {"data": db.selectQuery("SELECT * FROM Channels")} # TODO: Update with sql file
 
 class Channel(Resource):
-    def get(self):
-        if request.args.get('channel_id'): params = request.args.get('channel_id')
+    def get(self, id):
+        if id: params = id
         else: params = "%"
         return {
             "data": db.selectQuery("SELECT * FROM Channels WHERE Channel_ID LIKE ?", params=(params,)) # TODO: Update with sql file
