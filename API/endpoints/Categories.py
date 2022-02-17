@@ -4,3 +4,7 @@ from flask_restful import Resource
 class Categories(Resource):
     def get(self):
         return {"data": db.selectQuery("SELECT * FROM Categories")} # TODO: Update with sql file
+
+class Categories_Channel(Resource):
+    def get(self, id):
+        return {"data": db.selectQuery("SELECT * FROM Categories WHERE Channel_ID LIKE ?", params=(id,))} # TODO: Update with sql file

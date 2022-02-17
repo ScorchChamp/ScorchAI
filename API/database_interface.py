@@ -30,8 +30,10 @@ def runFileQuery(file: str, *, params: list = []):
         queries = f.read()
         for query in queries.split(";"):
             try:
-                executeQuery(query, params=params)
+                cursor = executeQuery(query, params=params)
+                return serializeCursor(cursor)
             except Exception as e:
+                print(e)
                 pass
 
 if not os.path.isfile(DATABASE_FILE):

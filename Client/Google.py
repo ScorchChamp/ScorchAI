@@ -12,18 +12,23 @@ import httplib2
 import http
 from googleapiclient.http import MediaFileUpload
 
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+httplib2.RETRIES = 1
+MAX_RETRIES = 10
+RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
+RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, http.client.NotConnected,
+http.client.IncompleteRead, http.client.ImproperConnectionState,
+http.client.CannotSendRequest, http.client.CannotSendHeader,
+http.client.ResponseNotReady, http.client.BadStatusLine)
 
 def Create_Service(channel, client_secret_file, api_name, api_version, *scopes):
     print(client_secret_file, api_name, api_version, scopes, sep='-')
-    CLIENT_SECRET_FILE = client_secret_file
-    API_SERVICE_NAME = api_name
-    API_VERSION = api_version
     SCOPES = [scope for scope in scopes[0]]
     print(SCOPES)
 
     cred = None
 
-    pickle_file = f'./assets/Channels/{channel}/token_{API_SERVICE_NAME}_{API_VERSION}.pickle'
+    pickle_file = f'{BASE_DIR}/auth/{channel}.pickle'
     print(pickle_file)
 
     if os.path.exists(pickle_file):
@@ -34,15 +39,15 @@ def Create_Service(channel, client_secret_file, api_name, api_version, *scopes):
         if cred and cred.expired and cred.refresh_token:
             cred.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(client_secret_file, SCOPES)
             cred = flow.run_local_server()
 
         with open(pickle_file, 'wb') as token:
             pickle.dump(cred, token)
 
     try:
-        service = build(API_SERVICE_NAME, API_VERSION, credentials=cred)
-        print(API_SERVICE_NAME, 'service created successfully')
+        service = build(api_name, api_version, credentials=cred)
+        print(api_name, 'service created successfully')
         return service
     except Exception as e:
         print('Unable to connect.')
@@ -51,21 +56,13 @@ def Create_Service(channel, client_secret_file, api_name, api_version, *scopes):
 
 def Upload_Video(request_body, file, channel):
         print(f"Uploading {file}")
-        service = Create_Service(channel, "./auth/client_secrets.json", 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
+        service = Create_Service(channel, f"{BASE_DIR}/auth/client_secrets.json", 'youtube', 'v3', ['https://www.googleapis.com/auth/youtube.upload'])
         mediaFile = MediaFileUpload(file, chunksize=-1, resumable=True)
         response_upload = service.videos().insert(
             part='snippet,status',
             body=request_body,
             media_body= mediaFile
         )
-
-        httplib2.RETRIES = 1
-        MAX_RETRIES = 10
-        RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
-        RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, http.client.NotConnected,
-            http.client.IncompleteRead, http.client.ImproperConnectionState,
-            http.client.CannotSendRequest, http.client.CannotSendHeader,
-            http.client.ResponseNotReady, http.client.BadStatusLine)
         response = None
         error = None
         retry = 0

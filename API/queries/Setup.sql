@@ -1,5 +1,3 @@
-
-
 CREATE TABLE users (
     User_ID int,
     login varchar(100),
@@ -111,3 +109,10 @@ INSERT INTO Tags VALUES
     ('abcdefg', 'ScorchAI'),
     ('abcdefg', 'Minecraft'),
     ('abcdefg', 'Bedrock');
+
+INSERT INTO Clips VALUES
+    ('123', 'test', 40934651, NULL, NULL, 40934651, NULL, 743, NULL, 250, NULL, NULL, 15, NULL),
+    ('1234', 'test', 40934651, NULL, NULL, 40934651, NULL, 743, NULL, 250, NULL, NULL, 15, NULL),
+    ('12345', 'test', 40934651, NULL, NULL, 40934651, NULL, 743, NULL, 250, NULL, NULL, 15, NULL),
+    ('123456', 'test', 40934651, NULL, NULL, 40934651, NULL, 743, NULL, 250, NULL, NULL, 15, NULL),
+    ('1234567', 'test', 40934651, NULL, NULL, 40934651, NULL, 743, NULL, 250, NULL, NULL, 15, NULL);

@@ -21,7 +21,9 @@ api.add_resource(Clips.Clip, '/clip/<id>')
 api.add_resource(Users.User, '/user/<id>')
 api.add_resource(Channels.Channel, '/channel/<id>')
 api.add_resource(Categories.Categories, '/categories')
-api.add_resource(Clips.NextClipForChannel, '/nextclipforchannel')
+api.add_resource(Categories.Categories_Channel, '/categories/<id>')
+api.add_resource(Clips.NextClipForChannel, '/nextclipforchannel/<id>')
+api.add_resource(Clips.ClipUploaded, '/clipuploaded')
 
 if __name__ == '__main__':
     app.run(port=8000, host='127.0.0.1')
