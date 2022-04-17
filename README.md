@@ -65,7 +65,6 @@
   </ol>
 </details>
 
-## <b>DISCLAIMER: THIS PROJECT IS NOT FREE TO USE, CONTACT ME FOR DETAILS </b>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
